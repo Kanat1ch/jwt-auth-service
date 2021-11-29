@@ -25,6 +25,8 @@ export const Login = () => {
                 >
                     <Input
                         placeholder="Username or Email"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         prefix={<UserOutlined style={{ color: '#979797' }} />} 
                     />
                 </Form.Item>
@@ -35,6 +37,8 @@ export const Login = () => {
                 >
                     <Input.Password
                         placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         prefix={<LockOutlined style={{ color: '#979797' }} />}
                     />
                 </Form.Item>

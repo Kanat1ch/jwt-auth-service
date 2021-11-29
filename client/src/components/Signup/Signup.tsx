@@ -27,6 +27,8 @@ export const Signup = () => {
                 >
                     <Input
                         placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         prefix={<UserOutlined style={{ color: '#979797' }} />} 
                     />
                 </Form.Item>
@@ -40,6 +42,8 @@ export const Signup = () => {
                 >
                     <Input
                         placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         prefix={<MailOutlined style={{ color: '#979797' }} />} 
                     />
                 </Form.Item>
@@ -50,6 +54,8 @@ export const Signup = () => {
                 >
                     <Input.Password
                         placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         prefix={<LockOutlined style={{ color: '#979797' }} />}
                     />
                 </Form.Item>
@@ -60,6 +66,8 @@ export const Signup = () => {
                 >
                     <Input.Password
                         placeholder="Repeat password"
+                        value={repeat}
+                        onChange={(e) => setRepeat(e.target.value)}
                         prefix={<LockOutlined style={{ color: '#979797' }} />}
                     />
                 </Form.Item>

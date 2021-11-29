@@ -17,12 +17,12 @@ const App = () => {
                     <Routes>
                         <Route path={ROUTES.login} element={<Login />} />
                         <Route path={ROUTES.registration} element={<Signup />} />
-                        <Route path={ROUTES.profile} element={<Profile />} />
+                        <Route path={ROUTES.profile.section} element={<Profile />} />
                         <Route
                             path="*"
                             element={
                                 isAuth 
-                                    ? <Navigate to={ROUTES.profile} />
+                                    ? <Navigate to={ROUTES.profile.account} />
                                     : <Navigate to={ROUTES.registration} />
                             }
                         />
@@ -36,8 +36,6 @@ const App = () => {
 export default App
 
 // TODO (frontend):
-//   - UI header'a авторизованного пользователя
-//   - Изображение профиля
 //   - UI смены пароля
 //   - Запросы на backend (по Ulbi TV)
 //   - Обработка ошибок с сервера
@@ -45,8 +43,11 @@ export default App
 //   - Маска для телефона
 //   - Верстка сообщений на почту
 //   - Адаптив
+//   - Темная тема
+//   - Смена языка
 
 // TODO (backend):
 //   - Добавление изображения в БД
 //   - Логика смены пароля (забыли пароль) и в ЛК
 //   - Изменение данных пользователя в ЛК (посмотреть hospital)
+//   - Настроить документацию Swagger
