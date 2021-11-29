@@ -21,10 +21,10 @@ export const Login = () => {
             >
                 <Form.Item
                 name="username"
-                rules={[{ required: true, message: 'Please input your username!' }]}
+                rules={[{ required: true, message: 'Please input your username or email!' }]}
                 >
                     <Input
-                        placeholder="Username"
+                        placeholder="Username or Email"
                         prefix={<UserOutlined style={{ color: '#979797' }} />} 
                     />
                 </Form.Item>

@@ -1,0 +1,60 @@
+.Profile {
+    &__header {
+        display: flex;
+        align-items: center;
+        position: relative;
+        margin-bottom: 40px;
+
+        &:after {
+            position: absolute;
+            display: block;
+            content: '';
+            width: 200vw;
+            margin-left: -100vw;
+            height: 1px;
+            bottom: -20px;
+            left: 0;
+            background-color: #bbb;
+        }
+    }
+
+    &__image {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: #eee;
+    }
+
+    &__info {
+        margin-left: 50px;
+    }
+
+    &__username {
+        font-weight: 700;
+        font-size: 50px;
+
+        span {
+            color: #979797;
+        }
+    }
+
+    &__action {
+        margin-right: 20px;
+    }
+
+    &__form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .col {
+            width: 48%;
+
+            h2 {
+                margin-bottom: 20px;
+                color: #979797;
+                font-weight: 700;
+            }
+        }
+    }
+}

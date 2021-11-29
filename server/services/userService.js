@@ -64,7 +64,7 @@ class UserService {
     }
 
     async login(username, password) {
-        const user = await User.findOne({ username })
+        const user = await User.findOne({ $or: [{ username }, { email: username }] })
 
         if (!user) {
             throw ApiError.BadRequest('Credentials not valid')
