@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Form, Input, Radio, Button } from 'antd'
 
 export const Personal = () => {
+
+    const user = useSelector((store: any) => store.user.user.data)
+
+    const [name, setName] = useState<string>('')
+    const [surname, setSurname] = useState<string>('')
+    const [sex, setSex] = useState<string>('')
+
     return (
         <div className="col">
             <h2>Personal</h2>
@@ -9,9 +17,12 @@ export const Personal = () => {
                 label="Name"
                 name="name"
                 wrapperCol={{ span: 24 }}
+                initialValue={user?.name}
             >
                 <Input
                     placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
             </Form.Item> 
 
@@ -19,9 +30,12 @@ export const Personal = () => {
                 label="Surname"
                 name="surname"
                 wrapperCol={{ span: 24 }}
+                initialValue={user?.surname}
             >
                 <Input
                     placeholder="Surname"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
                 />
             </Form.Item> 
 
@@ -29,8 +43,12 @@ export const Personal = () => {
                 label="Sex"
                 name="sex"
                 wrapperCol={{ span: 24 }}
+                initialValue={user?.sex}
             >
-                <Radio.Group value="male">
+                <Radio.Group
+                    value={sex}
+                    onChange={(e) => setSex(e.target.value)}
+                >
                     <Radio value="male">Male</Radio>
                     <Radio value="female">Female</Radio>
                 </Radio.Group>

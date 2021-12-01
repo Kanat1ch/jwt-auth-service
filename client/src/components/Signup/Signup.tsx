@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../routes'
 import { Form, Input, Button } from 'antd'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import './Signup.scss'
+import { useDispatch, useSelector } from 'react-redux'
+import { registration } from '../../store/actions/user/userAction'
 
 export const Signup = () => {
 
@@ -11,6 +13,26 @@ export const Signup = () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [repeat, setRepeat] = useState<string>('')
+
+    const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+    const loading = useSelector((state: any) => state.user.loadingComponent) === 'registration'
+    const isAuth = useSelector((state: any) => state.user.isAuth)
+
+    const signupHandler = () => {
+        try {
+            dispatch(registration(username, email, password))
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/profile/account')
+        }
+    }, [isAuth, navigate])
 
     return (
         <div className="Signup">
@@ -73,7 +95,12 @@ export const Signup = () => {
                 </Form.Item>
         
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        onClick={signupHandler}
+                        loading={loading}
+                    >
                         Sign up
                     </Button>
                 </Form.Item>

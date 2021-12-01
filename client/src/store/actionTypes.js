@@ -1,0 +1,5 @@
+export const SET_INIT = 'SET_INIT'
+export const SET_USER = 'SET_USER'
+export const SET_ERRORS = 'SET_ERRORS'
+export const SET_LOADING = 'SET_LOADING'
+export const SET_AVATAR = 'SET_AVATAR'

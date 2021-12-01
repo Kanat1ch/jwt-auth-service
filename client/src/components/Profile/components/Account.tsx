@@ -1,7 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Form, Input, Button } from 'antd'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { phoneMask } from '../../../lib/mask'
 
 export const Account = () => {
+
+    const user = useSelector((store: any) => store.user.user.data)
+
+    const [username, setUsername] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
+    const [phone, setPhone] = useState<string>('')
+
+    useEffect(() => {
+        phoneMask('phone-mask')
+    }, [])
+
     return (
         <div className="col">
             <h2>Account</h2>
@@ -10,21 +24,28 @@ export const Account = () => {
                 name="username"
                 wrapperCol={{ span: 24 }}
                 rules={[{ required: true }]}
+                initialValue={user?.username}
             >
                 <Input
-                    placeholder="Username or Email"
+                    value={username}
+                    placeholder="username"
+                    onChange={(e) => setUsername(e.target.value)}
                 />
             </Form.Item>
 
             <Form.Item
-                label="Email"
+                label={<div className="email-label"><span>Email</span> <Button type="link" className="verify-link">Verify email address</Button></div>}
                 name="email"
                 wrapperCol={{ span: 24 }}
                 rules={[{ required: true }]}
+                initialValue={user?.email}
             >
                 <Input
                     type="email"
-                    placeholder="Email"
+                    value={email}
+                    placeholder="email@gmail.com"
+                    onChange={(e) => setEmail(e.target.value)}
+                    suffix={<ExclamationCircleOutlined style={{ color: '#ffae00' }} />}
                 />
             </Form.Item>  
 
@@ -32,9 +53,14 @@ export const Account = () => {
                 label="Phone"
                 name="phone"
                 wrapperCol={{ span: 24 }}
+                initialValue={user?.phone}
             >
                 <Input
-                    placeholder="Phone"
+                    id="phone-mask"
+                    value={phone}
+                    placeholder="(999) 999-99-99"
+                    addonBefore="+7"
+                    onChange={(e) => setPhone(e.target.value)}
                 />
             </Form.Item>
             

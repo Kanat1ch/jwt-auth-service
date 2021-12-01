@@ -1,14 +1,37 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../routes'
 import { Form, Input, Button } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import './Login.scss'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../../store/actions/user/userAction'
 
 export const Login = () => {
 
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+
+    const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+    const loading = useSelector((state: any) => state.user.loadingComponent) === 'login'
+    const isAuth = useSelector((state: any) => state.user.isAuth)
+
+    const loginHandler = () => {
+        try {
+            dispatch(login(username, password))
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/profile/account')
+        }
+    }, [isAuth, navigate])
 
     return (
         <div className="Login">
@@ -44,7 +67,12 @@ export const Login = () => {
                 </Form.Item>
         
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        onClick={loginHandler}
+                        loading={loading}
+                    >
                         Log in
                     </Button>
                 </Form.Item>

@@ -62,6 +62,16 @@ class UserController {
         }
     }
 
+    async upload(req, res, next) {
+        try {
+            const { file, user: { id } } = req
+            const avatar = await UserService.updateAvatar(id, file)
+            return res.status(201).json(avatar)
+        } catch (e) {
+            next(e)
+        }
+    }
+
     async getUsers(req, res, next) {
         try {
             res.json(['User 1', 'User 2'])

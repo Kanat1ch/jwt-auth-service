@@ -5,6 +5,7 @@ class UserDto {
     sex;
     email;
     phone;
+    image;
     id;
     isActivated
 
@@ -15,6 +16,7 @@ class UserDto {
         this.sex = user.sex
         this.email = user.email
         this.phone = user.phone
+        this.image = user.image
         this.id = user.id
         this.isActivated = user.isActivated
     }

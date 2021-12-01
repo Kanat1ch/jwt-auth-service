@@ -5,4 +5,12 @@ export default class UserService {
     static fetchUsers(): Promise<AxiosResponse> {
         return $api.get('/users')
     }
+
+    static uploadAvatar(data: any): Promise<AxiosResponse> {
+        return $api.post('/upload', data, {
+            headers: {
+                "content-type": "multipart/form-data"
+            }
+        })
+    }
 }

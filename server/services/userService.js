@@ -6,6 +6,8 @@ const TokenService = require('./tokenService')
 const UserDto = require('../dtos/userDto')
 const ApiError = require('../exceptions/apiError')
 const validator = require('validator')
+const fs = require('fs')
+const path = require('path')
 
 class UserService {
     async registration(username, email, password) {
@@ -83,7 +85,7 @@ class UserService {
         const tokens = TokenService.generateTokens({ ...userDto })
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
 
-        return { ...tokens, user: userDto }
+        return { ...tokens, data: userDto }
     }
 
     async logout(refreshtoken) {
@@ -104,6 +106,16 @@ class UserService {
 
         const user = await User.findById(userData.id)
         return await this.generateAndSaveToken(user)
+    }
+
+    async updateAvatar(id, file) {
+        const user = await User.findById(id)
+        if (user.image !== 'empty.png') {
+            fs.unlinkSync(path.join(__dirname, '..', 'static', 'images', user.image))
+        }
+        user.image = file.filename
+        await user.save()
+        return { file }
     }
 }
 

@@ -35,4 +35,10 @@
     &__link:not(:last-child) {
         margin-right: 20px;
     }
+
+    @media screen and (max-width: 576px) {
+        .signup-btn {
+            display: none;
+        }
+    }
 }

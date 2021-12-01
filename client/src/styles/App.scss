@@ -12,6 +12,8 @@ body, input, button {
 
 .App {
     min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
 }
 
 .container {
@@ -35,4 +37,18 @@ body, input, button {
         max-width: 100%;
         padding: 0 15px;
     }
+}
+
+.throbber {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

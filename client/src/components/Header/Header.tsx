@@ -1,13 +1,16 @@
 import React from 'react'
 import { ROUTES } from '../../routes'
-import { Button } from 'antd'
+import { Button, Skeleton } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import './Header.scss'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 export const Header = () => {
 
-    const isAuth = true
+    const isAppInit = useSelector((state: any) => state.user.init)
+    const isUserAuthorized = useSelector((state: any) => state.user.isAuth)
+    console.log(isAppInit, isUserAuthorized)
 
     return (
         <header className="Header">
@@ -17,18 +20,19 @@ export const Header = () => {
                         <span>Auth</span>Service
                     </Link>
                 </div>
+                { isAppInit ?
                 <div className="Header__links">
                     {
-                        !isAuth ?
+                        !isUserAuthorized ?
                         <>
                             <div className="Header__link">
                                 <Link to={ROUTES.login}>
-                                    <Button type="primary">Log In</Button>
+                                    <Button className="login-btn" type="primary">Log In</Button>
                                 </Link>
                             </div>
                             <div className="Header__link">
                                 <Link to={ROUTES.registration}>
-                                    <Button>Sign Up</Button>
+                                    <Button className="signup-btn">Sign Up</Button>
                                 </Link>
                             </div>
                         </>
@@ -39,6 +43,7 @@ export const Header = () => {
                         </div>
                     }
                 </div>
+                : <Skeleton.Button active style={{ width: 112, height: 32 }} shape="square" /> }
             </div>
         </header>
     )
