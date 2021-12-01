@@ -30,7 +30,8 @@ const App = () => {
                     <Route path={ROUTES.home} element={<Home />} />
                     <Route path={ROUTES.login} element={<Login />} />
                     <Route path={ROUTES.registration} element={<Signup />} />
-                    <Route path={ROUTES.profile.section} element={<Profile />} />
+                    <Route path={ROUTES.profile.root} element={<Profile />} />
+                    <Route path={`${ROUTES.profile.root}/:section`} element={<Profile />} />
                     <Route path="*" element={<Navigate to={ROUTES.home} />}
                     />
                 </Routes>

@@ -10,7 +10,6 @@ export const Header = () => {
 
     const isAppInit = useSelector((state: any) => state.user.init)
     const isUserAuthorized = useSelector((state: any) => state.user.isAuth)
-    console.log(isAppInit, isUserAuthorized)
 
     return (
         <header className="Header">

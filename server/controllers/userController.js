@@ -1,4 +1,5 @@
 const UserService = require('../services/userService')
+const MailService = require('../services/mailService')
 const ApiError = require('../exceptions/apiError')
 
 class UserController {
@@ -45,7 +46,7 @@ class UserController {
         try {
             const activationLink = req.params.link
             await UserService.activate(activationLink)
-            return res.redirect(process.env.CLIENT_URL)
+            return res.redirect(`${process.env.CLIENT_URL}/profile/verified`)
         } catch (e) {
             next(e)
         }
@@ -70,6 +71,12 @@ class UserController {
         } catch (e) {
             next(e)
         }
+    }
+
+    async sendMessage(req, res, next) {
+        const { email, activationLink } = req.user
+        await MailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`)
+        return res.status(201).json({messge: 'Activation link successfully sended'})
     }
 
     async getUsers(req, res, next) {

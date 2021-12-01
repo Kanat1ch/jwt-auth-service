@@ -1,10 +1,11 @@
 export const ROUTES = {
     home: '/',
     profile: {
-        section: 'profile/:section',
+        root: '/profile',
         account: '/profile/account',
         personal: '/profile/personal',
-        secure: '/profile/secure'
+        secure: '/profile/secure',
+        verified: '/profile/verified'
     },
     login: '/login',
     registration: '/registration'

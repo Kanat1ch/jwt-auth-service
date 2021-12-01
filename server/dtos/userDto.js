@@ -7,7 +7,8 @@ class UserDto {
     phone;
     image;
     id;
-    isActivated
+    isActivated;
+    activationLink;
 
     constructor(user) {
         this.username = user.username
@@ -19,6 +20,7 @@ class UserDto {
         this.image = user.image
         this.id = user.id
         this.isActivated = user.isActivated
+        this.activationLink = user.activationLink
     }
 }
 

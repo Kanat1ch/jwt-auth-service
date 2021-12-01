@@ -5,6 +5,7 @@ import { logout, updateAvatar } from '../../store/actions/user/userAction'
 import { ROUTES } from '../../routes'
 import { Button, Form, Popconfirm, Modal, Slider, Menu, Skeleton } from 'antd'
 import { LogoutOutlined, DeleteOutlined, CloudUploadOutlined, SafetyOutlined, UserOutlined, LockOutlined } from '@ant-design/icons'
+import { ReactComponent as CheckIcon } from './images/check.svg'
 import { CropImage } from '../../lib/cropImage'
 import { Account } from './components/Account'
 import { Personal } from './components/Personal'
@@ -84,10 +85,33 @@ export const Profile = () => {
             case 'secure':
                 setMenuSection(<Secure />)
                 break
+            case 'verified':
+                setMenuSection(<Account />)
+                navigate('/profile/account')
+                showVerifiedModal()
+                console.log('Im here')
+                break
             default:
                 setMenuSection(<Account />)
                 navigate('/profile/account')
         }
+    }
+
+    const showVerifiedModal = () => {
+        setTimeout(() => {
+            Modal.success({
+                content: (
+                    <div className="verified-modal">
+                        <CheckIcon />
+                        <h3>Account has been successfully verified!</h3>
+                    </div>
+                ),
+                centered: true,
+                icon: null,
+                closable: true,
+                maskClosable: true
+            })
+        }, 1000)
     }
 
     useEffect(() => {
@@ -99,7 +123,9 @@ export const Profile = () => {
     }, []);
 
     useEffect(() => {
-        changeMenuSection(params.section)
+        if (params) {
+            changeMenuSection(params.section)
+        }
         // eslint-disable-next-line
     }, [params])
 

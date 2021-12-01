@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Form, Input, Button } from 'antd'
-import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { Form, Input, Button, notification } from 'antd'
+import { ExclamationCircleOutlined, LoadingOutlined, CheckOutlined } from '@ant-design/icons'
 import { phoneMask } from '../../../lib/mask'
+import { sendActivationMail } from '../../../store/actions/user/userAction'
 
 export const Account = () => {
 
@@ -12,9 +13,43 @@ export const Account = () => {
     const [email, setEmail] = useState<string>('')
     const [phone, setPhone] = useState<string>('')
 
+    const [verifying, setVerifying] = useState<boolean>(false)
+    const [retryTimer, setRetryTimer] = useState<number>(60)
+
+    const dispatch = useDispatch()
+
     useEffect(() => {
         phoneMask('phone-mask')
     }, [])
+
+    const activateAccount = () => {
+        notification.success({
+            message: 'Account verification',
+            description: <p>We are sent an activation link to <strong>{user?.email}</strong> email address</p>,
+            duration: 6,
+            placement: "bottomRight"
+        })
+
+        setVerifying(true)
+        dispatch(sendActivationMail())
+    }
+
+    useEffect(() => {
+        let interval: any = null;
+        if (verifying) {
+          interval = setInterval(() => {
+            setRetryTimer(sec => sec - 1);
+          }, 1000);
+          if (retryTimer <= 0) {
+            clearInterval(interval);
+            setVerifying(false)
+          }
+        } else {
+            setRetryTimer(60)
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [verifying, retryTimer])
 
     return (
         <div className="col">
@@ -34,7 +69,26 @@ export const Account = () => {
             </Form.Item>
 
             <Form.Item
-                label={<div className="email-label"><span>Email</span> <Button type="link" className="verify-link">Verify email address</Button></div>}
+                label={
+                    <div className="email-label">
+                        <span>Email</span>
+                        { user?.isActivated
+                            ? <p className="verified-text"><CheckOutlined /> Verified</p>
+                            : <Button
+                                onClick={() => activateAccount()}
+                                type="link"
+                                className="verify-link"
+                                disabled={verifying}
+                            >
+                                { !verifying
+                                    ? <>Verify email address</>
+                                    : <>Verifying. You can resend it in {retryTimer}s</>
+                                }
+                            </Button>
+                        }
+                        
+                    </div>
+                }
                 name="email"
                 wrapperCol={{ span: 24 }}
                 rules={[{ required: true }]}
@@ -45,7 +99,11 @@ export const Account = () => {
                     value={email}
                     placeholder="email@gmail.com"
                     onChange={(e) => setEmail(e.target.value)}
-                    suffix={<ExclamationCircleOutlined style={{ color: '#ffae00' }} />}
+                    suffix={
+                        !user?.isActivated ? !verifying
+                            ? <ExclamationCircleOutlined style={{ color: '#ffae00' }} />
+                            : <LoadingOutlined style={{ color: '#1890ff' }} />
+                    : null}
                 />
             </Form.Item>  
 

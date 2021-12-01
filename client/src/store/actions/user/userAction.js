@@ -76,6 +76,16 @@ export function updateAvatar(image) {
     }
 }
 
+export function sendActivationMail() {
+    return async () => {
+        try {
+            await UserService.sendActivationMail()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+}
+
 export function loginSuccess(user) {
     return {
         type: SET_USER,

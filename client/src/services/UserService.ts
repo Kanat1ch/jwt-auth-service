@@ -13,4 +13,8 @@ export default class UserService {
             }
         })
     }
+
+    static sendActivationMail(): Promise<AxiosResponse> {
+        return $api.post('/activate')
+    }
 }
