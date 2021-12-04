@@ -1,4 +1,4 @@
-import { SET_LOADING, SET_USER, SET_ERRORS, SET_AVATAR, SET_INIT } from '../../actionTypes'
+import { SET_LOADING, SET_USER, SET_USER_ERRORS, UPDATE_USER, INIT_APP, SET_USER_UPDATED, SET_USER_UPDATED_FAILED, REMOVE_ERRORS } from '../../actionTypes'
 
 const initialState = {
     init: false,
@@ -11,7 +11,7 @@ const initialState = {
 
 export default function userReducer(state = initialState, action) {
     switch (action.type) {
-        case SET_INIT:
+        case INIT_APP:
         return {
             ...state,
             init: action.init
@@ -24,7 +24,20 @@ export default function userReducer(state = initialState, action) {
                 errors: {},
                 status: action.status,
             }
-        case SET_ERRORS:
+        case SET_USER_UPDATED:
+            return {
+                ...state,
+                user: action.user,
+                errors: {},
+                status: action.status,
+            }
+        case SET_USER_UPDATED_FAILED:
+                return {
+                    ...state,
+                    errors: action.errors,
+                    status: action.status
+                }
+        case SET_USER_ERRORS:
             return {
                 ...state,
                 user: {},
@@ -37,16 +50,16 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 loadingComponent: action.loading,
             }
-        case SET_AVATAR:
+        case UPDATE_USER:
             return {
                 ...state,
-                user: {
-                    ...state.user,
-                    data: {
-                        ...state.user.data,
-                        image: action.image
-                    }
-                }
+                user: action.user,
+            }
+        case REMOVE_ERRORS:
+            return {
+                ...state,
+                errors: {},
+                status: ''
             }
         default:
             return state

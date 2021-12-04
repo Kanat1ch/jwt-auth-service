@@ -2,7 +2,7 @@ import axios from 'axios'
 import { API_URL } from '../../../http'
 import AuthService from '../../../services/AuthService'
 import UserService from '../../../services/UserService'
-import { SET_LOADING, SET_USER, SET_ERRORS, SET_AVATAR, SET_INIT } from '../../actionTypes'
+import { SET_LOADING, SET_USER, SET_USER_ERRORS, SET_USER_UPDATED, SET_USER_UPDATED_FAILED, UPDATE_USER, INIT_APP, REMOVE_ERRORS } from '../../actionTypes'
 
 export function login(username, password) {
     return async (dispatch) => {
@@ -49,6 +49,21 @@ export function logout() {
     }
 }
 
+export function deleteUser() {
+    return async (dispatch) => {
+        try {
+            dispatch(loading('delete'))
+            await UserService.delete()
+            localStorage.removeItem('token')
+            dispatch(logoutSuccess())
+        } catch (e) {
+            console.log(e)
+        } finally {
+            dispatch(loading(null))
+        }
+    }
+}
+
 export function isAuth() {
     return async (dispatch) => {
         try {
@@ -65,11 +80,26 @@ export function isAuth() {
     }
 }
 
+export function edit(formData) {
+    return async (dispatch) => {
+        try {
+            dispatch(loading('edit'))
+            const response = await UserService.edit(formData)
+            localStorage.setItem('token', response.data.accessToken)
+            dispatch(editSuccess(response.data))
+        } catch (e) {
+            dispatch(editFailed(e.response.data, 'error'))
+        } finally {
+            dispatch(loading(null))
+        }
+    }
+}
+
 export function updateAvatar(image) {
     return async (dispatch) => {
         try {
             const response = await UserService.uploadAvatar(image)
-            dispatch(updateAvatarSuccess(response.data.file.filename))
+            dispatch(updateUserSuccess(response.data))
         } catch (e) {
             console.log(e)
         }
@@ -86,12 +116,39 @@ export function sendActivationMail() {
     }
 }
 
+export function sendVerificationCode() {
+    return async () => {
+        try {
+            await UserService.sendVerificationCode()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+}
+
+
 export function loginSuccess(user) {
     return {
         type: SET_USER,
         user,
         isAuth: true,
         status: 'success'
+    }
+}
+
+export function editSuccess(user) {
+    return {
+        type: SET_USER_UPDATED,
+        user,
+        status: 'edited'
+    }
+}
+
+export function editFailed(errors, status) {
+    return {
+        type: SET_USER_UPDATED_FAILED,
+        errors,
+        status: status
     }
 }
 
@@ -106,7 +163,7 @@ export function logoutSuccess() {
 
 export function authFailed(errors, status) {
     return {
-        type: SET_ERRORS,
+        type: SET_USER_ERRORS,
         errors,
         isAuth: false,
         status: status
@@ -120,16 +177,22 @@ export function loading(loadingComponent) {
     }
 }
 
-export function updateAvatarSuccess(image) {
+export function updateUserSuccess(user) {
     return {
-        type: SET_AVATAR,
-        image
+        type: UPDATE_USER,
+        user
     }
 }
 
 export function setInit(init) {
     return {
-        type: SET_INIT,
+        type: INIT_APP,
         init
+    }
+}
+
+export function removeErrors() {
+    return {
+        type: REMOVE_ERRORS
     }
 }

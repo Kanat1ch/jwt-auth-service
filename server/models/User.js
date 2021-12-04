@@ -10,7 +10,8 @@ const schema = new Schema({
     image: { type: String, default: 'empty.png' },
     password: { type: String, required: true },
     activationLink: { type: String },
-    isActivated: { type: Boolean, default: false},
+    mailVerified: { type: Boolean, default: false},
+    phoneVerified: { type: Boolean, default: false},
 })
 
 module.exports = model('User', schema)

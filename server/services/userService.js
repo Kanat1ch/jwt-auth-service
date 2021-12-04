@@ -1,68 +1,53 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
-const MailService = require('./mailService')
 const TokenService = require('./tokenService')
 const UserDto = require('../dtos/userDto')
 const ApiError = require('../exceptions/apiError')
-const validator = require('validator')
 const fs = require('fs')
 const path = require('path')
+const SmsService = require('./smsService')
 
 class UserService {
     async registration(username, email, password) {
-        const errors = {}
+        const errors = await this.isDataAlreadyExist({
+            username,
+            email,
+            password
+        }, null)
 
-        const candidateWithUsername = await User.findOne({ username })
-        const candidateWithEmail = await User.findOne({ email })
-
-        const isCorrectUsername = validator.isLength(username, { min: 3, max: 20 })
-        const isCorrectEmail = validator.isEmail(email)
-        const isCorrectPassword = validator.isLength(password, { min: 6, max: 30 })
-
-        if (candidateWithUsername) {
-            errors.username = 'A user with this username address already exists'
-        }
-
-        if (candidateWithEmail) {
-            errors.email = 'A user with this e-mail address already exists'
-        }
-
-        if (!isCorrectUsername) {
-            errors.username = 'Username must be from 3 to 20 symbols'
-        }
-
-        if (!isCorrectEmail) {
-            errors.email = 'Enter the correct E-mail address'
-        }
-
-        if (!isCorrectPassword) {
-            errors.password = 'Password must be from 3 to 20 symbols'
-        }
-
-
-        if (Object.keys(errors).length) {
-            return { errors: errors }
+        if (errors) {
+            return { errors }
         }
 
         const hashPassword = await bcrypt.hash(password, 5)
         const activationLink = uuid.v4()
 
         const user = await User.create({ username, email, password: hashPassword, activationLink })
-        await MailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`)
 
         return await this.generateAndSaveToken(user)
     }
 
-    async activate(activationLink) {
+    async verifyEmail(activationLink) {
         const user = await User.findOne({ activationLink })
 
         if (!user) {
             throw ApiError.BadRequest('Unavailable activation link')
         }
 
-        user.isActivated = true
+        user.mailVerified = true
         await user.save()
+    }
+
+    async verifyPhone(user, code) {
+        const userFromDB = await User.findById(user.id)
+        const isValid = await SmsService.checkVerifyCode(`+7${user.phone.replace(/\D/g,'')}`, code)
+        if (isValid) {
+            userFromDB.phoneVerified = true
+            await userFromDB.save()
+            return await this.generateAndSaveToken(userFromDB)
+        }
+        throw ApiError.BadRequest('Invalid code')
     }
 
     async login(username, password) {
@@ -92,6 +77,11 @@ class UserService {
        return await TokenService.removeToken(refreshtoken)
     }
 
+    async delete(id, refreshtoken) {
+        await User.findOneAndDelete({ _id: id })
+        return await TokenService.removeToken(refreshtoken)
+     }
+
     async refresh(refreshToken) {
         if (!refreshToken) {
             throw ApiError.UnauthorizedError()
@@ -108,6 +98,22 @@ class UserService {
         return await this.generateAndSaveToken(user)
     }
 
+    async edit(userData, formData) {
+        const user = await User.findById(userData.id)
+
+        const errors = await this.isDataAlreadyExist(formData, userData.id)
+        if (errors) {
+            return { errors }
+        }
+
+        for (const [key, value] of Object.entries(formData)) {
+            user[key] = value
+        }
+
+        user.save()
+        return await this.generateAndSaveToken(user)
+    }
+
     async updateAvatar(id, file) {
         const user = await User.findById(id)
         if (user.image !== 'empty.png') {
@@ -115,7 +121,41 @@ class UserService {
         }
         user.image = file.filename
         await user.save()
-        return { file }
+        return await this.generateAndSaveToken(user)
+    }
+
+    async isDataAlreadyExist(dataToValidate, userID) {
+        const errors = []
+        const dataToValidateArray = Object.entries(dataToValidate)
+
+        for (const [key, value] of dataToValidateArray) {
+            if (key === 'email') {
+                const candidate = await User.findOne({ email: value })
+                if (candidate && (userID ? candidate._id.toString() !== userID : true)) {
+                    errors.push('email')
+                }
+            }
+
+            if (key === 'username') {
+                const candidate = await User.findOne({ username: value })
+                if (candidate && (userID ? candidate._id.toString() !== userID : true)) {
+                    errors.push('username')
+                }
+            }
+
+            if (key === 'phone' && value) {
+                const candidate = await User.findOne({ phone: value })
+                if (candidate && (userID ? candidate._id.toString() !== userID : true)) {
+                    errors.push('phone')
+                }
+            }
+        }
+
+        if (errors.length) {
+            return errors
+        }
+
+        return false
     }
 }
 

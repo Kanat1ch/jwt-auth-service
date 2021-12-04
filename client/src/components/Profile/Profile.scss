@@ -138,6 +138,10 @@
             width: 100%;
         }
 
+        label {
+            width: 100%;
+        }
+
         .col {
             width: 100%;
 
@@ -157,10 +161,11 @@
             width: 100%;
         }
 
-        .email-label {
+        .verification-label {
             width: 100%;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
         .verify-link {
@@ -182,10 +187,49 @@
     align-items: center;
 }
 
-.verified-modal {
+.email-verified-modal {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.phone-verified-modal {
+    display: flex;
+    flex-direction: column;
+
+    &-success {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .ant-form-item {
+        margin-top: 15px;
+    }
+
+    .ant-form-item-control {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .verify-link {
+        padding: 0;
+    }
+
+    input {
+        width: 120px;
+        font-size: 20px;
+        letter-spacing: 3px;
+        text-align: center;
+    }
+
+    .ant-form-item-explain-error {
+        text-align: center;
+    }
 }

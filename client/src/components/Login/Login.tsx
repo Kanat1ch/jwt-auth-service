@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../routes'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import './Login.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../../store/actions/user/userAction'
+import { login, removeErrors } from '../../store/actions/user/userAction'
 
 export const Login = () => {
+
+    const errorMessage = useSelector((state: any) => state.user.errors?.message)
 
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -26,12 +28,18 @@ export const Login = () => {
         }
     }
 
-
     useEffect(() => {
         if (isAuth) {
             navigate('/profile/account')
         }
     }, [isAuth, navigate])
+
+    useEffect(() => {
+        if (errorMessage) {
+            message.error(errorMessage);
+            dispatch(removeErrors())
+        }
+    }, [errorMessage])
 
     return (
         <div className="Login">
@@ -41,6 +49,7 @@ export const Login = () => {
                 initialValues={{ remember: true }}
                 autoComplete="off"
                 layout="vertical"
+                onFinish={loginHandler}
             >
                 <Form.Item
                 name="username"
@@ -70,7 +79,6 @@ export const Login = () => {
                     <Button
                         type="primary"
                         htmlType="submit"
-                        onClick={loginHandler}
                         loading={loading}
                     >
                         Log in

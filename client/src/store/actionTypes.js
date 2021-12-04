@@ -1,5 +1,11 @@
-export const SET_INIT = 'SET_INIT'
+export const INIT_APP = 'INIT_APP'
 export const SET_USER = 'SET_USER'
-export const SET_ERRORS = 'SET_ERRORS'
+export const SET_USER_ERRORS = 'SET_USER_ERRORS'
+export const SET_USER_UPDATED = 'SET_USER_UPDATED'
+export const SET_USER_UPDATED_FAILED = 'SET_USER_UPDATED_FAILED'
 export const SET_LOADING = 'SET_LOADING'
-export const SET_AVATAR = 'SET_AVATAR'
+export const UPDATE_USER = 'UPDATE_USER'
+export const PHONE_VERIFY = 'PHONE_VERIFY'
+export const REMOVE_ERRORS = 'REMOVE_ERRORS'
+
+

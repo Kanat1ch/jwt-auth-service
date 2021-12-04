@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, updateAvatar } from '../../store/actions/user/userAction'
+import { deleteUser, logout, updateAvatar } from '../../store/actions/user/userAction'
 import { ROUTES } from '../../routes'
 import { Button, Form, Popconfirm, Modal, Slider, Menu, Skeleton } from 'antd'
 import { LogoutOutlined, DeleteOutlined, CloudUploadOutlined, SafetyOutlined, UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -21,8 +21,8 @@ export const Profile = () => {
     const user = useSelector((state: any) => state.user.user.data)
     const isAuth = useSelector((state: any) => state.user.isAuth)
     const isAppInit = useSelector((state: any) => state.user.init)
-    const logoutLoading = useSelector((state: any) => state.user.loadingComponent) === 'logout'
-    
+    const loading = useSelector((state: any) => state.user.loadingComponent)
+
     const [userImage, setUserImage] = useState<any>(null)
     const [editor, setEditor] = useState<any>(null)
     const [imageScale, setImageScale] = useState<number>(1)
@@ -31,6 +31,7 @@ export const Profile = () => {
     const [imageModalSize, setImageModalSize] = useState<number>(350)
 
     const [menuSection, setMenuSection] = useState<ReactElement>(<Account />)
+    const [activeMenuLink, setActiveMenuLink] = useState<string>('account')
     const [menuMode, setMenuMode] = useState<menuMode>('inline')
 
     const params = useParams()
@@ -54,6 +55,7 @@ export const Profile = () => {
 
             dispatch(updateAvatar(formData))
             setShowImageModal(false)
+            setImageScale(1)
         }
     }
 
@@ -62,6 +64,14 @@ export const Profile = () => {
     const logoutHandler = () => {
         try {
             dispatch(logout())
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const deleteHandler = () => {
+        try {
+            dispatch(deleteUser())
         } catch (e) {
             console.log(e)
         }
@@ -89,7 +99,6 @@ export const Profile = () => {
                 setMenuSection(<Account />)
                 navigate('/profile/account')
                 showVerifiedModal()
-                console.log('Im here')
                 break
             default:
                 setMenuSection(<Account />)
@@ -101,9 +110,9 @@ export const Profile = () => {
         setTimeout(() => {
             Modal.success({
                 content: (
-                    <div className="verified-modal">
+                    <div className="email-verified-modal">
                         <CheckIcon />
-                        <h3>Account has been successfully verified!</h3>
+                        <h3>Email has been successfully verified!</h3>
                     </div>
                 ),
                 centered: true,
@@ -125,6 +134,7 @@ export const Profile = () => {
     useEffect(() => {
         if (params) {
             changeMenuSection(params.section)
+            setActiveMenuLink(params.section!)
         }
         // eslint-disable-next-line
     }, [params])
@@ -163,13 +173,14 @@ export const Profile = () => {
                     }
                     </div>
                     <div className="Profile__actions">
-                        <Button className="Profile__action" icon={<LogoutOutlined /> } onClick={logoutHandler} loading={logoutLoading}>Log out</Button>
+                        <Button className="Profile__action" icon={<LogoutOutlined /> } onClick={logoutHandler} loading={loading === 'logout'}>Log out</Button>
                         <Popconfirm
                             title="Are you sure to delete your account?"
                             okText="Yes"
                             cancelText="Cancel"
+                            onConfirm={deleteHandler}
                         >
-                            <Button className="Profile__action" icon={<DeleteOutlined />} danger>Delete account</Button>
+                            <Button className="Profile__action" icon={<DeleteOutlined />} loading={loading === 'delete'} danger>Delete account</Button>
                         </Popconfirm>
                     </div>
                 </div>
@@ -178,6 +189,7 @@ export const Profile = () => {
                 <Menu
                     onClick={(section: any) => changeMenuSection(section.key)}
                     defaultSelectedKeys={['account']}
+                    selectedKeys={[activeMenuLink]}
                     mode={menuMode}
                 >
                     <Menu.Item key="account" icon={<SafetyOutlined />}>
@@ -191,25 +203,17 @@ export const Profile = () => {
                     </Menu.Item>
                 </Menu>
 
-                <Form
-                    className="Profile__form"
-                    name="basic"
-                    initialValues={{ remember: true }}
-                    autoComplete="off"
-                    layout="vertical"
-                >
                     { isAppInit ?
                         menuSection
-                        : <>
+                        : <div className="Profile__form">
                             <Skeleton active paragraph={{ rows: 0 }} />
                             <Skeleton.Input style={{ width: '100%' }} active size="default" />
                             <Skeleton active paragraph={{ rows: 0 }} />
                             <Skeleton.Input style={{ width: '100%' }} active size="default" />
                             <Skeleton active paragraph={{ rows: 0 }} />
                             <Skeleton.Input style={{ width: '100%' }} active size="default" />
-                        </>
+                        </div>
                     }
-                </Form>
             </div>
 
 
