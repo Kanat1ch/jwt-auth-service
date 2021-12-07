@@ -9,7 +9,7 @@ const schema = new Schema({
     phone: { type: String,  default: '' },
     image: { type: String, default: 'empty.png' },
     password: { type: String, required: true },
-    activationLink: { type: String },
+    code: { type: String },
     mailVerified: { type: Boolean, default: false},
     phoneVerified: { type: Boolean, default: false},
 })

@@ -7,6 +7,7 @@ const ApiError = require('../exceptions/apiError')
 const fs = require('fs')
 const path = require('path')
 const SmsService = require('./smsService')
+const MailService = require('./mailService')
 
 class UserService {
     async registration(username, email, password) {
@@ -21,29 +22,35 @@ class UserService {
         }
 
         const hashPassword = await bcrypt.hash(password, 5)
-        const activationLink = uuid.v4()
 
-        const user = await User.create({ username, email, password: hashPassword, activationLink })
+        const user = await User.create({ username, email, password: hashPassword})
 
         return await this.generateAndSaveToken(user)
     }
 
-    async verifyEmail(activationLink) {
-        const user = await User.findOne({ activationLink })
-
-        if (!user) {
-            throw ApiError.BadRequest('Unavailable activation link')
+    async sendCode(service, data) {
+        if (service === 'email') {
+            await MailService.sendActivationMail(data)
         }
 
-        user.mailVerified = true
-        await user.save()
+        if (service === 'phone') {
+            await SmsService.sendVerifyCode(`+7${data.replace(/\D/g,'')}`)
+        }
     }
 
-    async verifyPhone(user, code) {
+    async verifyCode(service, user, code) {
         const userFromDB = await User.findById(user.id)
-        const isValid = await SmsService.checkVerifyCode(`+7${user.phone.replace(/\D/g,'')}`, code)
+        let isValid = false
+        switch (service) {
+            case 'phone':
+                isValid = await SmsService.checkVerifyCode(`+7${user.phone.replace(/\D/g,'')}`, code)
+                userFromDB.phoneVerified = true
+                break
+            case 'email':
+                isValid = await MailService.checkVerifyCode(user.email, code)
+                userFromDB.mailVerified = true
+        }
         if (isValid) {
-            userFromDB.phoneVerified = true
             await userFromDB.save()
             return await this.generateAndSaveToken(userFromDB)
         }

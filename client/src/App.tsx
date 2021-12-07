@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/Layout/Layout'
-import { Home } from './components/Home/Home'
-import { Login } from './components/Login/Login'
-import { Signup } from './components/Signup/Signup'
-import { Profile } from './components/Profile/Profile'
+import { Home } from './pages/Home/Home'
+import { Login } from './pages/Login/Login'
+import { Signup } from './pages/Signup/Signup'
+import { Profile } from './pages/Profile/Profile'
 import "./styles/main.css"
 import './styles/App.scss'
 import { ROUTES } from './routes'
@@ -44,7 +44,6 @@ export default App
 
 // TODO (frontend):
 //   - UI главной страницы
-//   - Верстка сообщений на почту
 //   - Темная тема
 //   - Смена языка
 

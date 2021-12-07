@@ -55,16 +55,6 @@ class UserController {
         }
     }
 
-    async verifyEmail(req, res, next) {
-        try {
-            const activationLink = req.params.link
-            await UserService.verifyEmail(activationLink)
-            return res.redirect(`${process.env.CLIENT_URL}/profile/verified`)
-        } catch (e) {
-            next(e)
-        }
-    }
-
     async refresh(req, res, next) {
         try {
             const { refreshToken } = req.cookies
@@ -114,20 +104,22 @@ class UserController {
         }
     }
 
-    async sendMessage(req, res, next) {
-        try {
-            const { email, activationLink } = req.user
-            await MailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`)
-            return res.status(201).json({messge: 'Activation link successfully sended'})
-        } catch (e) {
-            next(e)
-        }
-    }
-
     async sendVerifyCode(req, res, next) {
         try {
-            const { phone } = req.user
-            await SmsService.sendVerifyCode(`+7${phone.replace(/\D/g,'')}`)
+            const { verifyingService } = req.body
+            const { email, phone } = req.user
+
+            let data = null
+            switch (verifyingService) {
+                case 'email':
+                    data = email
+                    break
+                case 'phone':
+                    data = phone
+                    break
+            }
+
+            await UserService.sendCode(verifyingService, data)
             return res.status(201).json({messge: 'Verify code successfully sended'})
         } catch (e) {
             next(e)
@@ -136,8 +128,8 @@ class UserController {
 
     async checkVerifyCode(req, res, next) {
         try {
-            const { user, body: { code } } = req
-            const userData = await UserService.verifyPhone(user, code)
+            const { user, body: { verifyingService, code } } = req
+            const userData = await UserService.verifyCode(verifyingService, user, code)
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
             return res.status(201).json(userData)
         } catch (e) {

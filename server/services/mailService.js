@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer')
+const generateCode = require('../lib/code')
+const User = require('../models/User')
 
 class MailService {
 
@@ -14,7 +16,12 @@ class MailService {
         })
     }
 
-    async sendActivationMail(to, link) {
+    async sendActivationMail(to) {
+        const code = generateCode(6)
+        const user = await User.findOne({ email: to })
+        user.code = code
+        await user.save()
+
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
@@ -32,10 +39,22 @@ class MailService {
                     align-items: center;
                 ">
                     <h1 style="color: #eee; font-size: 50px; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);"><span style="color: #1890ff;">Auth</span>Service</h1>
-                    <a style="color: #fff; background-color: #1890ff; font-size: 20px; font-weight: 700; padding: 15px 30px; text-decoration: none; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2)" href="${link}">Активировать аккаунт</a>
+                    <div style="color: #fff; background-color: #1890ff; font-size: 20px; font-weight: 700; padding: 15px 30px; text-decoration: none; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2)">${code}</div>
                 </div>
             `
         })
+    }
+
+    async checkVerifyCode(email, code) {
+        const user = await User.findOne({ email })
+
+        if (user.code === code) {
+            user.code = ''
+            await user.save()
+            return true
+        } else {
+            return false
+        }
     }
 }
 

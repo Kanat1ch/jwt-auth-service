@@ -26,11 +26,11 @@ export default class UserService {
         return $api.post('/activate')
     }
 
-    static sendVerificationCode(): Promise<AxiosResponse> {
-        return $api.post('/send-verify')
+    static sendVerificationCode(verifyingService: string): Promise<AxiosResponse> {
+        return $api.post('/send-verify', { verifyingService })
     }
 
-    static checkVerificationCode(code: string): Promise<AxiosResponse> {
-        return $api.post('/check-verify', { code })
+    static checkVerificationCode(verifyingService: string, code: string): Promise<AxiosResponse> {
+        return $api.post('/check-verify', { verifyingService, code })
     }
 }

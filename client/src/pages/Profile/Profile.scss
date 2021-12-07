@@ -138,7 +138,7 @@
             width: 100%;
         }
 
-        label {
+        .phone-label label {
             width: 100%;
         }
 
@@ -187,15 +187,7 @@
     align-items: center;
 }
 
-.email-verified-modal {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.phone-verified-modal {
+.verified-modal {
     display: flex;
     flex-direction: column;
 

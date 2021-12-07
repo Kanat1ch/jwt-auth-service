@@ -95,32 +95,10 @@ export const Profile = () => {
             case 'secure':
                 setMenuSection(<Secure />)
                 break
-            case 'verified':
-                setMenuSection(<Account />)
-                navigate('/profile/account')
-                showVerifiedModal()
-                break
             default:
                 setMenuSection(<Account />)
                 navigate('/profile/account')
         }
-    }
-
-    const showVerifiedModal = () => {
-        setTimeout(() => {
-            Modal.success({
-                content: (
-                    <div className="email-verified-modal">
-                        <CheckIcon />
-                        <h3>Email has been successfully verified!</h3>
-                    </div>
-                ),
-                centered: true,
-                icon: null,
-                closable: true,
-                maskClosable: true
-            })
-        }, 1000)
     }
 
     useEffect(() => {

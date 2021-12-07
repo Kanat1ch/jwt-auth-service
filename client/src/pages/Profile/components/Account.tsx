@@ -21,26 +21,14 @@ export const Account = () => {
     const [code, setCode] = useState<string>('')
     const [validateLoading, setValidateLoading] = useState<boolean>(false)
 
+    const [verificationType, setVerificationType] = useState<'email' | 'phone'>('email')
     const [showVerifyModal, setShowVerifyModal] = useState<boolean>(false)
     const [successVerifying, setSuccessVerifying] = useState<boolean>(false)
 
-    const [emailVerifyingDelay, setEmailVerifyingDelay] = useState<boolean>(false)
-    const [phoneVerifyingDelay, setPhoneVerifyingDelay] = useState<boolean>(false)
-    const [emailRetryTimer, setEmailRetryTimer] = useState<number>(30)
-    const [phoneRetryTimer, setPhoneRetryTimer] = useState<number>(30)
+    const [delay, setDelay] = useState({ email: false, phone: false })
+    const [timer, setTimer] = useState({ email: 30, phone: 30 })
 
     const dispatch = useDispatch()
-
-    const verifyEmail = () => {
-        notification.success({
-            message: 'Email verification',
-            description: <p>We are sent an activation link to <strong>{user?.email}</strong> email address</p>,
-            duration: 6,
-            placement: "bottomRight"
-        })
-        setEmailVerifyingDelay(true)
-        dispatch(sendActivationMail())
-    }
 
     const inputRef = useRef<any>(null)
 
@@ -52,15 +40,20 @@ export const Account = () => {
         }
     }, [code])
 
-    const verifyPhone = async () => {
+    const verify = async (service: 'email' | 'phone') => {
+        setVerificationType(service)
         setShowVerifyModal(true)
-        setPhoneVerifyingDelay(true)
-        await UserService.sendVerificationCode()
+        setDelay({ ...delay, [service]: true })
+        await UserService.sendVerificationCode(service)
     }
 
     const updateUserHandler = () => {
         dispatch(edit({ username, email, phone }))
     }
+
+    // useEffect(() => {
+    //     console.log('Username: ', username)
+    // }, [username])
 
     useEffect(() => {
         phoneMask('phone-mask')
@@ -75,37 +68,20 @@ export const Account = () => {
 
     useEffect(() => {
         let interval: any = null;
-        if (emailVerifyingDelay) {
+        if (delay[verificationType]) {
           interval = setInterval(() => {
-            setEmailRetryTimer(sec => sec - 1);
+            setTimer(state => ({ ...state, [verificationType]: state[verificationType] - 1 }));
           }, 1000);
-          if (emailRetryTimer <= 0) {
+          if (timer[verificationType] <= 0) {
             clearInterval(interval);
-            setEmailVerifyingDelay(false)
+            setDelay({ ...delay, [verificationType]: false })
           }
         } else {
-            setEmailRetryTimer(30)
+            setTimer({ ...timer, [verificationType]: 30 })
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    }, [emailVerifyingDelay, emailRetryTimer])
-
-    useEffect(() => {
-        let interval: any = null;
-        if (phoneVerifyingDelay) {
-          interval = setInterval(() => {
-            setPhoneRetryTimer(sec => sec - 1);
-          }, 1000);
-          if (phoneRetryTimer <= 0) {
-            clearInterval(interval);
-            setPhoneVerifyingDelay(false)
-          }
-        } else {
-            setPhoneRetryTimer(30)
-            clearInterval(interval);
-        }
-        return () => clearInterval(interval);
-    }, [phoneVerifyingDelay, phoneRetryTimer])
+    }, [delay[verificationType], timer[verificationType]])
 
     return (
         <>
@@ -156,14 +132,14 @@ export const Account = () => {
                                 { user?.mailVerified
                                     ? <p className="verified-text"><CheckOutlined /> Verified</p>
                                     : <Button
-                                        onClick={() => verifyEmail()}
+                                        onClick={() => verify('email')}
                                         type="link"
                                         className="verify-link"
-                                        disabled={emailVerifyingDelay}
+                                        disabled={delay.email}
                                     >
-                                        { !emailVerifyingDelay
+                                        { !delay.email
                                             ? <>Verify email address<ExclamationCircleOutlined style={{ color: '#40a9ff', marginLeft: 5 }} /></>
-                                            : <>Verifying. You can resend it in {emailRetryTimer}s</>
+                                            : <>Verifying. You can resend it in {timer.email}s</>
                                         }
                                     </Button>
                                 }
@@ -197,7 +173,7 @@ export const Account = () => {
                             placeholder="email@gmail.com"
                             onChange={(e) => setEmail(e.target.value)}
                             suffix={
-                                emailVerifyingDelay && <LoadingOutlined style={{ color: '#1890ff' }} />
+                                delay.email && <LoadingOutlined style={{ color: '#1890ff' }} />
                             }
                         />
                     </Form.Item>  
@@ -209,14 +185,14 @@ export const Account = () => {
                                 { user?.phoneVerified
                                     ? <p className="verified-text"><CheckOutlined /> Verified</p>
                                     : <Button
-                                        onClick={() => verifyPhone()}
+                                        onClick={() => verify('phone')}
                                         type="link"
                                         className="verify-link"
-                                        disabled={phoneVerifyingDelay || !user?.phone}
+                                        disabled={delay.phone || !user?.phone}
                                     >
-                                        { !phoneVerifyingDelay
+                                        { !delay.phone
                                             ? <>Verify phone number<ExclamationCircleOutlined style={{ color: user?.phone ? '#40a9ff' : '#00000026', marginLeft: 5 }} /></>
-                                            : <>Verifying. Resend a code in {phoneRetryTimer}s</>
+                                            : <>Verifying. Resend a code in {timer.phone}s</>
                                         }
                                     </Button>
                                 }
@@ -224,6 +200,7 @@ export const Account = () => {
                             </div>
                         }
                         name="phone"
+                        className="phone-label"
                         wrapperCol={{ span: 24 }}
                         initialValue={user?.phone}
                         rules={[ 
@@ -237,7 +214,7 @@ export const Account = () => {
                             addonBefore="+7"
                             onChange={(e) => setPhone(e.target.value)}
                             suffix={
-                                phoneVerifyingDelay && <LoadingOutlined style={{ color: '#1890ff' }} />
+                                delay.phone && <LoadingOutlined style={{ color: '#1890ff' }} />
                             }
                         />
                     </Form.Item>
@@ -263,18 +240,19 @@ export const Account = () => {
                 okType="default"
                 okText="Verify"
                 onOk={(close) => !close}
-                title="Phone verification"
+                title={`${verificationType === 'email' ? 'Email' : 'Phone'} verification`}
                 footer={!successVerifying && [
-                    <Button htmlType="submit" form="phone-verify" loading={validateLoading}>Submit</Button>
+                    <Button htmlType="submit" form="verify" loading={validateLoading}>Submit</Button>
                 ]}
                 width={450}
             >
-                <div className={`phone-verified-modal${successVerifying ? '-success' : ''}`}>
+                <div className={`verified-modal${successVerifying ? '-success' : ''}`}>
                     { !successVerifying ?
                         <>
-                        <h4>We're sent the SMS with a verification code to your phone +7 {user?.phone}</h4>
-                        <p>Please, enter a code from your device into input below</p>
-                        <Form id="phone-verify" onFinish={() => setValidateLoading(false)} onFinishFailed={() => setValidateLoading(false)} validateTrigger="onSubmit">
+                        {verificationType === 'phone' && <h4>We're sent the SMS with a verification code to your phone +7 {user?.phone}</h4>}
+                        {verificationType === 'email' && <h4>We're sent a verification code to your email {user?.email}</h4>}
+                        <p>Please, enter a code from {verificationType === 'email' ? <>your email</> : <>SMS</>} into input below</p>
+                        <Form id="verify" onFinish={() => setValidateLoading(false)} onFinishFailed={() => setValidateLoading(false)} validateTrigger="onSubmit">
                             <Form.Item
                                 name="code"
                                 rules={[
@@ -285,9 +263,9 @@ export const Account = () => {
                                             }
                                             try {
                                                 setValidateLoading(true)
-                                                const isValidCode = await UserService.checkVerificationCode(value.toString())
+                                                const isValidCode = await UserService.checkVerificationCode(verificationType === 'email' ? 'email' : 'phone', value.toString())
                                                 dispatch(updateUserSuccess(isValidCode.data))
-                                                setPhoneVerifyingDelay(false)
+                                                setDelay({ ...delay, [verificationType]: false })
                                                 setSuccessVerifying(true)
                                                 localStorage.setItem('token', isValidCode.data.accessToken)
                                                 return Promise.resolve();
@@ -309,22 +287,23 @@ export const Account = () => {
                                 />
                             </Form.Item>
                             <Button
-                                onClick={() => verifyPhone()}
+                                onClick={() => verify(verificationType)}
                                 type="link"
                                 className="verify-link"
-                                disabled={phoneVerifyingDelay}
+                                disabled={delay[verificationType]}
                             >
-                                { !phoneVerifyingDelay
+                                { !delay[verificationType]
                                     ? <>Resend a code</>
-                                    : <>Didn't get a code? You can resend it in {phoneRetryTimer}s</>
+                                    : <>Didn't get a code? You can resend it in {timer[verificationType]}s</>
                                 }
                             </Button>
-                            <Button htmlType="submit" form="phone-verify" id="submit-code-btn" style={{ display: 'none' }} />
+                            <Button htmlType="submit" form="verify" id="submit-code-btn" style={{ display: 'none' }} />
                         </Form>
                         </>
                     : <>
                         <CheckIcon />
-                        <h3>Phone has been successfully verified!</h3>
+                        {verificationType === 'email' && <h3>Email has been successfully verified!</h3>}
+                        {verificationType === 'phone' && <h3>Phone has been successfully verified!</h3>}
                     </>}
                 </div>
             </Modal>

@@ -9,7 +9,6 @@ class UserDto {
     id;
     mailVerified;
     phoneVerified;
-    activationLink;
 
     constructor(user) {
         this.username = user.username
@@ -22,7 +21,6 @@ class UserDto {
         this.id = user.id
         this.mailVerified = user.mailVerified
         this.phoneVerified = user.phoneVerified
-        this.activationLink = user.activationLink
     }
 }
 

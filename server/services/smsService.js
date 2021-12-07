@@ -1,10 +1,10 @@
-const client = require('twilio')('AC1a0386e4d46e9e4d4f72d8ffaadc8672', '474786ce3b691f9933c9a65a761998ed')
+const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
 const ApiError = require('../exceptions/apiError')
 
 class SmsService {
     async sendVerifyCode(phone) {
         try {
-            const message = await client.verify.services('VAe6b755d167cfb889ca2fe6019725d6ad').verifications.create({
+            const message = await client.verify.services(process.env.TWILIO_SERVIVE).verifications.create({
                 to: phone,
                 channel: 'sms',
             })
@@ -15,7 +15,7 @@ class SmsService {
 
     async checkVerifyCode(phone, code) {
         try {
-            const message = await client.verify.services('VAe6b755d167cfb889ca2fe6019725d6ad').verificationChecks.create({
+            const message = await client.verify.services(process.env.TWILIO_SERVIVE).verificationChecks.create({
                 to: phone,
                 code
             })

@@ -24,17 +24,6 @@ export const Secure = () => {
                 </Form.Item> 
 
                 <Form.Item
-                    label="Repeat password"
-                    name="repeat"
-                    wrapperCol={{ span: 24 }}
-                    rules={[{ required: true }]}
-                >
-                    <Input.Password
-                        placeholder="Repeat password"
-                    />
-                </Form.Item> 
-
-                <Form.Item
                     label="New password"
                     name="newPassword"
                     wrapperCol={{ span: 24 }}
@@ -44,6 +33,17 @@ export const Secure = () => {
                         placeholder="New password"
                     />
                 </Form.Item> 
+
+                <Form.Item
+                    label="Repeat password"
+                    name="repeat"
+                    wrapperCol={{ span: 24 }}
+                    rules={[{ required: true }]}
+                >
+                    <Input.Password
+                        placeholder="Repeat password"
+                    />
+                </Form.Item>
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
