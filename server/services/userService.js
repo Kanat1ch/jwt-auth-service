@@ -48,7 +48,7 @@ class UserService {
                 break
             case 'email':
                 isValid = await MailService.checkVerifyCode(user.email, code)
-                userFromDB.mailVerified = true
+                userFromDB.emailVerified = true
         }
         if (isValid) {
             await userFromDB.save()
@@ -114,6 +114,10 @@ class UserService {
         }
 
         for (const [key, value] of Object.entries(formData)) {
+            if ((key === 'email' || key === 'phone') && value !== user[key]) {
+                user[`${key}Verified`] = false
+            }
+
             user[key] = value
         }
 
@@ -131,31 +135,27 @@ class UserService {
         return await this.generateAndSaveToken(user)
     }
 
+    async updatePassword(id, password) {
+        const user = await User.findById(id)
+        const hashPassword = await bcrypt.hash(password, 5)
+        user.password = hashPassword
+        await user.save()
+    }
+
     async isDataAlreadyExist(dataToValidate, userID) {
         const errors = []
         const dataToValidateArray = Object.entries(dataToValidate)
 
         for (const [key, value] of dataToValidateArray) {
-            if (key === 'email') {
-                const candidate = await User.findOne({ email: value })
-                if (candidate && (userID ? candidate._id.toString() !== userID : true)) {
-                    errors.push('email')
-                }
-            }
 
-            if (key === 'username') {
-                const candidate = await User.findOne({ username: value })
-                if (candidate && (userID ? candidate._id.toString() !== userID : true)) {
-                    errors.push('username')
-                }
-            }
+            const needToValidate = ['username', 'email', 'phone']
 
-            if (key === 'phone' && value) {
-                const candidate = await User.findOne({ phone: value })
+            if (needToValidate.includes(key) && value) {
+                const candidate = await User.findOne({ [key]: value })
                 if (candidate && (userID ? candidate._id.toString() !== userID : true)) {
-                    errors.push('phone')
+                    errors.push(key)
                 }
-            }
+            } 
         }
 
         if (errors.length) {
@@ -163,6 +163,16 @@ class UserService {
         }
 
         return false
+    }
+
+    async isPasswordEqual(id, password) {
+        const user = await User.findById(id)
+
+        const isPasswordEqual = await bcrypt.compare(password, user.password)
+
+        if (!isPasswordEqual) {
+            throw ApiError.BadRequest('Incorrect password')
+        }
     }
 }
 

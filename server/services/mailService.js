@@ -25,7 +25,7 @@ class MailService {
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
-            subject: 'Активация аккаунта на сайте Auth',
+            subject: 'Activation code from Auth Service',
             text: '',
             html: `
                 <div style="
@@ -39,7 +39,7 @@ class MailService {
                     align-items: center;
                 ">
                     <h1 style="color: #eee; font-size: 50px; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);"><span style="color: #1890ff;">Auth</span>Service</h1>
-                    <div style="color: #fff; background-color: #1890ff; font-size: 20px; font-weight: 700; padding: 15px 30px; text-decoration: none; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2)">${code}</div>
+                    <div style="color: #000; background-color: #fff; border-radius: 4px; font-size: 24px; letter-spacing: 4px; padding: 15px 30px; text-decoration: none; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2)">${code}</div>
                 </div>
             `
         })

@@ -11,9 +11,10 @@ router.post('/is-exist', userController.isExist)
 router.post('/send-verify', authMiddleware, userController.sendVerifyCode)
 router.post('/check-verify', authMiddleware, userController.checkVerifyCode)
 router.post('/edit', authMiddleware, userController.edit)
+router.post('/is-password-equal', authMiddleware, userController.isPasswordEqual)
+router.post('/update-password', authMiddleware, userController.updatePassword)
 router.post('/upload', authMiddleware, uploadMiddleware.single('avatar'), userController.upload)
 router.post('/delete', authMiddleware, userController.delete)
 router.get('/refresh', userController.refresh)
-router.get('/users', authMiddleware, userController.getUsers)
 
 module.exports = router

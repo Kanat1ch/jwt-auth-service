@@ -7,7 +7,7 @@ class UserDto {
     phone;
     image;
     id;
-    mailVerified;
+    emailVerified;
     phoneVerified;
 
     constructor(user) {
@@ -19,7 +19,7 @@ class UserDto {
         this.phone = user.phone
         this.image = user.image
         this.id = user.id
-        this.mailVerified = user.mailVerified
+        this.emailVerified = user.emailVerified
         this.phoneVerified = user.phoneVerified
     }
 }

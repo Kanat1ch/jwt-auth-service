@@ -5,4 +5,15 @@
     &__preview-text {
         color: #979797;
     }
+
+    &__actions {
+        .ant-form-item-control-input-content {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    &__forgot-password-btn.ant-btn-link {
+        padding-right: 0;
+    }
 }

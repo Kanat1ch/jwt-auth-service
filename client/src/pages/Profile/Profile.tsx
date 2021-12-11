@@ -3,9 +3,8 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteUser, logout, updateAvatar } from '../../store/actions/user/userAction'
 import { ROUTES } from '../../routes'
-import { Button, Form, Popconfirm, Modal, Slider, Menu, Skeleton } from 'antd'
-import { LogoutOutlined, DeleteOutlined, CloudUploadOutlined, SafetyOutlined, UserOutlined, LockOutlined } from '@ant-design/icons'
-import { ReactComponent as CheckIcon } from './images/check.svg'
+import { Button, Popconfirm, Modal, Slider, Menu, Skeleton } from 'antd'
+import { LogoutOutlined, DeleteOutlined, CloudUploadOutlined, SafetyOutlined, UserOutlined, LockOutlined, FormatPainterOutlined } from '@ant-design/icons'
 import { CropImage } from '../../lib/cropImage'
 import { Account } from './components/Account'
 import { Personal } from './components/Personal'
@@ -14,6 +13,7 @@ import './Profile.scss'
 import { dataURLtoFile } from '../../lib/dataURLtoFile'
 import moment from 'moment'
 import { STATIC_URL } from '../../http'
+import { Appearance } from './components/Appearance'
 
 type menuMode = 'vertical' | 'horizontal' | 'inline'
 
@@ -95,6 +95,9 @@ export const Profile = () => {
             case 'secure':
                 setMenuSection(<Secure />)
                 break
+            case 'appearance':
+            setMenuSection(<Appearance />)
+            break
             default:
                 setMenuSection(<Account />)
                 navigate('/profile/account')
@@ -178,6 +181,9 @@ export const Profile = () => {
                     </Menu.Item>
                     <Menu.Item key="secure" icon={<LockOutlined />}>
                         <Link to={ROUTES.profile.secure}>Secure</Link>
+                    </Menu.Item>
+                    <Menu.Item key="appearance" icon={<FormatPainterOutlined />}>
+                        <Link to={ROUTES.profile.apperience}>Appearance</Link>
                     </Menu.Item>
                 </Menu>
 

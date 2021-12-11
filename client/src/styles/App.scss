@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 * {
     box-sizing: border-box;
@@ -7,48 +8,39 @@
 }
 
 body, input, button {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Montserrat', sans-serif !important;
 }
 
-.App {
-    min-height: 100vh;
-    width: 100%;
-    overflow: hidden;
-}
-
-.container {
-    max-width: 1140px;
-    width: 100%;
-    margin: 0 auto;
-
-    @media screen and (max-width: 1200px) {
-        max-width: 960px;
+#root {
+    .App {
+        min-height: 100vh;
+        width: 100%;
+        overflow: hidden;
     }
-
-    @media screen and (max-width: 992px) {
-        max-width: 720px;
+    
+    .container {
+        max-width: 1140px;
+        width: 100%;
+        margin: 0 auto;
+    
+        @media screen and (max-width: 1200px) {
+            max-width: 960px;
+        }
+    
+        @media screen and (max-width: 992px) {
+            max-width: 720px;
+        }
+    
+        @media screen and (max-width: 768px) {
+            max-width: 540px;
+        }
+    
+        @media screen and (max-width: 576px) {
+            max-width: 100%;
+            padding: 0 15px;
+        }
     }
-
-    @media screen and (max-width: 768px) {
-        max-width: 540px;
-    }
-
-    @media screen and (max-width: 576px) {
-        max-width: 100%;
-        padding: 0 15px;
-    }
-}
-
-.throbber {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    
+    
+    
 }

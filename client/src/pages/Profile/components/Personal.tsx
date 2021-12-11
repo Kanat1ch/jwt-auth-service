@@ -40,7 +40,6 @@ export const Personal = () => {
                 <Form.Item
                     label="Name"
                     name="name"
-                    wrapperCol={{ span: 24 }}
                     initialValue={user?.name}
                 >
                     <Input
@@ -53,7 +52,6 @@ export const Personal = () => {
                 <Form.Item
                     label="Surname"
                     name="surname"
-                    wrapperCol={{ span: 24 }}
                     initialValue={user?.surname}
                 >
                     <Input
@@ -66,7 +64,6 @@ export const Personal = () => {
                 <Form.Item
                     label="Sex"
                     name="sex"
-                    wrapperCol={{ span: 24 }}
                     initialValue={user?.sex}
                 >
                     <Radio.Group

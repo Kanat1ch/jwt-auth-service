@@ -120,7 +120,7 @@ class UserController {
             }
 
             await UserService.sendCode(verifyingService, data)
-            return res.status(201).json({messge: 'Verify code successfully sended'})
+            return res.status(201).json({ messge: 'Verify code successfully sended' })
         } catch (e) {
             next(e)
         }
@@ -137,9 +137,21 @@ class UserController {
         }
     }
 
-    async getUsers(req, res, next) {
+    async isPasswordEqual(req, res, next) {
         try {
-            res.json(['User 1', 'User 2'])
+            const { body: {password}, user: {id} } = req
+            await UserService.isPasswordEqual(id, password)
+            return res.status(201).json('Password is valid')
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async updatePassword(req, res, next) {
+        try {
+            const { body: {password}, user: {id} } = req
+            await UserService.updatePassword(id, password)
+            return res.status(201).json({ message: 'Password has been successfully changed' })
         } catch (e) {
             next(e)
         }

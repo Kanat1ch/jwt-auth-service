@@ -6,6 +6,7 @@ import { Login } from './pages/Login/Login'
 import { Signup } from './pages/Signup/Signup'
 import { Profile } from './pages/Profile/Profile'
 import "./styles/main.css"
+import "./styles/dark.scss"
 import './styles/App.scss'
 import { ROUTES } from './routes'
 import { useDispatch } from 'react-redux'
@@ -16,12 +17,16 @@ const App = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark')
+        }
+        
         if (localStorage.getItem('token')) {
             dispatch(isAuth())
         } else {
             dispatch(setInit(true))
         }
-    }, [dispatch])
+    }, [])
 
     return (
         <div className="App">

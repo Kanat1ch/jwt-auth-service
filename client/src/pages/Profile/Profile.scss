@@ -1,4 +1,4 @@
-.Profile {
+#root .Profile {
     &__header {
         display: flex;
         align-items: center;
@@ -31,10 +31,12 @@
         background-size: cover;
         background-repeat: no-repeat;
 
-        &:hover &-upload {
-            opacity: 1;
-            visibility: visible;
-        }
+        &:hover {
+            .Profile__image-upload {
+                opacity: 1;
+                visibility: visible;
+            }
+        } 
 
         &-upload {
             background-color: rgba(0, 0, 0, 0.3);
@@ -118,6 +120,10 @@
 
         .ant-menu {
             width: 220px;
+
+            @media screen and (min-width: 993px) {
+                height: 400px;
+            }
         }
 
         @media screen and (max-width: 992px) {
@@ -173,6 +179,11 @@
             height: auto;
         }
 
+        .verify-tooltip {
+            display: flex;
+            align-items: center;
+        }
+
         .verified-text {
             color: #52c41a;
             margin: 0;
@@ -181,47 +192,153 @@
     }
 }
 
-.modal-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.ant-modal-root {
+    .modal-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .verified-modal {
+        display: flex;
+        flex-direction: column;
+    
+        &-success {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+    
+        .ant-form-item {
+            margin-top: 15px;
+        }
+    
+        .ant-form-item-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .verify-link {
+            padding: 0;
+        }
+    
+        input {
+            width: 120px;
+            font-size: 20px;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+    
+        .ant-form-item-explain-error {
+            text-align: center;
+        }
+    }    
 }
 
-.verified-modal {
-    display: flex;
-    flex-direction: column;
+body.dark #root .Profile {
+    &__header {
+        &:after {
+            background-color: #555;
+        }
+    }
+}
 
-    &-success {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        margin-bottom: 40px;
+.ant-form-item {
+    position: relative;
+}
+
+.change-theme-animation.active {
+    position: absolute;
+    left: 50px;
+    top: 15px;
+    width: 1px;
+    height: 1px;
+    background-color: #222;
+    border-radius: 50%;
+
+    &.dark {
+        animation: changeToDark 1.5s;
     }
 
-    .ant-form-item {
-        margin-top: 15px;
+    &.light {
+        animation: changeToLight 1.5s;
+    }
+}
+
+@keyframes changeToDark {
+    0% {
+        box-shadow: 0px 0px 0 #222;
     }
 
-    .ant-form-item-control {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    50% {
+        box-shadow: 0px 0px 150vh 150vh #222;
     }
 
-    .verify-link {
-        padding: 0;
+    70% {
+        box-shadow: 0px 0px 0 #22222200;
     }
 
-    input {
-        width: 120px;
-        font-size: 20px;
-        letter-spacing: 3px;
-        text-align: center;
+    100% {
+        box-shadow: 0px 0px 0 #22222200;
+    }
+}
+
+@keyframes changeToLight {
+    0% {
+        box-shadow: 0px 0px 0 #fff;
     }
 
-    .ant-form-item-explain-error {
-        text-align: center;
+    50% {
+        box-shadow: 0px 0px 150vh 150vh #fff;
+    }
+
+    70% {
+        box-shadow: 0px 0px 0 #ffffff00;
+    }
+
+    100% {
+        box-shadow: 0px 0px 0 #ffffff00;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    @keyframes changeToDark {
+        0% {
+            box-shadow: 0px 0px 0 #222;
+        }
+    
+        50% {
+            box-shadow: 0px 0px 100vw 100vw #222;
+        }
+    
+        70% {
+            box-shadow: 0px 0px 0 #22222200;
+        }
+    
+        100% {
+            box-shadow: 0px 0px 0 #22222200;
+        }
+    }
+
+    @keyframes changeToLight {
+        0% {
+            box-shadow: 0px 0px 0 #fff;
+        }
+    
+        50% {
+            box-shadow: 0px 0px 150vw 150vw #fff;
+        }
+    
+        70% {
+            box-shadow: 0px 0px 0 #ffffff00;
+        }
+    
+        100% {
+            box-shadow: 0px 0px 0 #ffffff00;
+        }
     }
 }

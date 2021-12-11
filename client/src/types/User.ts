@@ -5,6 +5,6 @@ export interface User {
     sex: string
     email: string,
     phone: string,
-    mailVerified: boolean,
+    emailVerified: boolean,
     id?: string
 }

@@ -75,13 +75,20 @@ export const Login = () => {
                     />
                 </Form.Item>
         
-                <Form.Item>
+                <Form.Item className="Login__actions">
                     <Button
                         type="primary"
                         htmlType="submit"
                         loading={loading}
                     >
                         Log in
+                    </Button>
+
+                    <Button
+                        type="link"
+                        className="Login__forgot-password-btn"
+                    >
+                        Reset password
                     </Button>
                 </Form.Item>
             </Form>

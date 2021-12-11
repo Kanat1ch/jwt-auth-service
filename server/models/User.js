@@ -10,7 +10,7 @@ const schema = new Schema({
     image: { type: String, default: 'empty.png' },
     password: { type: String, required: true },
     code: { type: String },
-    mailVerified: { type: Boolean, default: false},
+    emailVerified: { type: Boolean, default: false},
     phoneVerified: { type: Boolean, default: false},
 })
 

@@ -22,6 +22,10 @@ export default class UserService {
         })
     }
 
+    static async updatePassword(password: string): Promise<AxiosResponse> {
+        return $api.post('/update-password', { password })
+    }
+
     static sendActivationMail(): Promise<AxiosResponse> {
         return $api.post('/activate')
     }
@@ -32,5 +36,9 @@ export default class UserService {
 
     static checkVerificationCode(verifyingService: string, code: string): Promise<AxiosResponse> {
         return $api.post('/check-verify', { verifyingService, code })
+    }
+
+    static async isPasswordEqual(password: string): Promise<AxiosResponse> {
+        return $api.post('/is-password-equal', { password })
     }
 }
