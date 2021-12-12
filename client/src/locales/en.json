@@ -1,0 +1,87 @@
+{
+    "Login": "Login",
+    "Signup": "Signup",
+    "Login or": "Log in to your account or",
+    "Register or": "Register or",
+    "register now": "register now",
+    "login now": "log in to your account",
+    "Username or Email": "Username or Email",
+    "Reset password": "Reset password",
+    "Account": "Account",
+    "Personal": "Personal",
+    "Secure": "Secure",
+    "Appearance": "Appearance",
+    "Username": "Username",
+    "Profile": "Profile",
+    "User username": "{{ username }}'s",
+    "Email": "Email",
+    "Phone": "Phone",
+    "Name": "Name",
+    "Surname": "Surname",
+    "Sex": "Sex",
+    "Male": "Male",
+    "Female": "Female",
+    "Password": "Password",
+    "Old password": "Old password",
+    "New password": "New password",
+    "Repeat password": "Repeat password",
+    "Language": "Language",
+    "Dark mode": "Dark mode",
+    "Russian": "Russian",
+    "English": "English",
+    "ON": "ON",
+    "OFF": "OFF",
+    "Verify email": "Verify email address",
+    "Verify phone": "Verify phone number",
+    "Verified": "Verifed",
+    "Email tooltip message": "With verificated email address you can enable two factor authentication using this method",
+    "Phone tooltip message": "With verificated phone number you can enable two factor authentication using this method",
+    "Logout": "Log out",
+    "Delete account": "Delete account",
+    "Confirm delete": "Are you sure to delete your account?",
+    "Update account": "Update account",
+    "Update personal info": "Update personal info",
+    "Update password": "Update password",
+    "Yes": "Yes",
+    "Cancel": "Cancel",
+    "Submit": "Submit",
+    "Email verification": "Email verification",
+    "Phone verification": "Phone verification",
+    "Sent email code": "We're sent a verification code to your email {{ email }}",
+    "Sent phone code": "We're sent a verification code to your phone +7 {{ phone }}",
+    "Enter a code": "Please, enter a code from your email into input below",
+    "Email verified": "Email has been successfully verified!",
+    "Phone verified": "Phone has been successfully verified!",
+    "Didnt get a code": "You can resend a code in {{ sec }}s",
+    "Resend a code": "Resend a code",
+    "errors": {
+        "username": {
+            "empty": "Please input your username",
+            "length": "Username must be from 3 to 20 symbols",
+            "exist": "Username {{ value }} is already exist"
+        },
+        "email": {
+            "empty": "Please input your email",
+            "invalid": "The email is not valid",
+            "exist": "Email {{ value }} is already exist"
+        },
+        "password": {
+            "empty": "Please input your password",
+            "length": "Password must be from 6 to 30 symbols",
+            "incorrect": "Incorrect password"
+        },
+        "confirm": {
+            "empty": "Please confirm your password",
+            "notMatch": "Passwords do not match"
+        },
+        "phone": {
+            "invalid": "Please, input a correct phone number",
+            "exist": "Phone +7 {{ value }} is already exist"
+        },
+        "login": "Credentials not valid",
+        "wrong": "Something went wrong..."
+    },
+    "success": {
+        "update": "Account successfully updated"
+    }
+}

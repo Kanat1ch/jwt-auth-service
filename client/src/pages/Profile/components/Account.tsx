@@ -6,6 +6,7 @@ import { phoneMask } from '../../../lib/mask'
 import { edit, removeErrors } from '../../../store/actions/user/userAction'
 import AuthService from '../../../services/AuthService'
 import { VerificationModal } from '../../../components/VerificationModal/VerificationModal'
+import { t } from 'i18next'
 
 export const Account = () => {
 
@@ -32,7 +33,7 @@ export const Account = () => {
 
     useEffect(() => {
         if (loading && status === 'edited') {
-            message.success('Account successfully updated');
+            message.success(t('success.update'));
             dispatch(removeErrors())
         }
     }, [loading, status])
@@ -48,13 +49,13 @@ export const Account = () => {
                 onFinish={updateUserHandler}
             >
                 <div className="col">
-                    <h2>Account</h2>
+                    <h2>{t('Account')}</h2>
                     <Form.Item
-                        label="Username"
+                        label={t('Username')}
                         name="username"
                         rules={[
-                            { required: true, message: 'Please input your username' },
-                            { min: 3, max: 20, message: 'Username must be from 3 to 20 symbols' },
+                            { required: true, message: t('errors.username.empty') },
+                            { min: 3, max: 20, message: t('errors.username.length') },
                             () => ({
                                 async validator(_, value) {
                                     if (!value) {
@@ -64,7 +65,7 @@ export const Account = () => {
                                     if (!isValueExist.data.errors) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error(`Username ${value} is already exist`));
+                                    return Promise.reject(new Error(t('errors.username.exist', { value: value })));
                                 },
                             }),
                         ]}
@@ -73,7 +74,7 @@ export const Account = () => {
                     >
                         <Input
                             value={username}
-                            placeholder="username"
+                            placeholder="user"
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </Form.Item>
@@ -81,18 +82,18 @@ export const Account = () => {
                     <Form.Item
                         label={
                             <div className="verification-label">
-                                <span>Email</span>
+                                <span>{t('Email')}</span>
                                 { user?.emailVerified
-                                    ? <p className="verified-text"><CheckOutlined /> Verified</p>
+                                    ? <p className="verified-text"><CheckOutlined /> {t('Verified')}</p>
                                     : <div className="verify-tooltip">
                                     <Button
                                         onClick={() => setShowVerifyEmail(true)}
                                         type="link"
                                         className="verify-link"
                                     >
-                                        Verify email address
+                                        {t('Verify email')}
                                     </Button>
-                                    <Tooltip placement="topRight" title="With verificated email address you can enable two factor authentication using this method">
+                                    <Tooltip placement="topRight" title={t('Email tooltip message')}>
                                         <QuestionCircleOutlined style={{ color: '#999', marginLeft: 10, fontSize: 17 }} />
                                     </Tooltip>
                                 </div>
@@ -102,8 +103,8 @@ export const Account = () => {
                         }
                         name="email"
                         rules={[
-                            { type: 'email', message: 'The email is not valid' },
-                            { required: true, message: 'Please input your email' },
+                            { type: 'email', message: t('errors.email.invalid') },
+                            { required: true, message: t('errors.email.empty') },
                             () => ({
                                 async validator(_, value) {
                                     if (!value) {
@@ -113,7 +114,7 @@ export const Account = () => {
                                     if (!isValueExist.data.errors) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error(`Email ${value} is already exist`));
+                                    return Promise.reject(new Error(t('errors.email.exist', { value: value })));
                                 },
                             }),
                         ]}
@@ -131,9 +132,9 @@ export const Account = () => {
                     <Form.Item
                         label={
                             <div className="verification-label">
-                                <span>Phone</span>
+                                <span>{t('Phone')}</span>
                                 { user?.phoneVerified
-                                    ? <p className="verified-text"><CheckOutlined /> Verified</p>
+                                    ? <p className="verified-text"><CheckOutlined /> {t('Verified')}</p>
                                     : <div className="verify-tooltip">
                                         <Button
                                             onClick={() => setShowVerifyPhone(true)}
@@ -141,9 +142,9 @@ export const Account = () => {
                                             className="verify-link"
                                             disabled={!user?.phone}
                                         >
-                                            Verify phone number
+                                            {t('Verify phone')}
                                         </Button>
-                                        <Tooltip placement="topRight" title="With verificated phone number you can enable two factor authentication using this method">
+                                        <Tooltip placement="topRight" title={t('Phone tooltip message')}>
                                             <QuestionCircleOutlined style={{ color: '#999', marginLeft: 10, fontSize: 17 }} />
                                         </Tooltip>
                                     </div>
@@ -155,7 +156,7 @@ export const Account = () => {
                         className="phone-label"
                         initialValue={user?.phone}
                         rules={[ 
-                            { len: 15, message: 'Please input a correct phone number' },
+                            { len: 15, message: t('errors.phone.invalid') },
                             () => ({
                                 async validator(_, value) {
                                     if (!value) {
@@ -165,7 +166,7 @@ export const Account = () => {
                                     if (!isValueExist.data.errors) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error(`Phone +7 ${value} is already exist`));
+                                    return Promise.reject(new Error(t('errors.phone.exist', { value: value })));
                                 },
                             }),
                         ]}
@@ -186,7 +187,7 @@ export const Account = () => {
                             htmlType="submit"
                             loading={loading}
                         >
-                            Update account
+                            {t('Update account')}
                         </Button>
                     </Form.Item>
                 </div>

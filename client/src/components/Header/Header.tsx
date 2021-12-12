@@ -5,6 +5,7 @@ import { UserOutlined } from '@ant-design/icons'
 import './Header.scss'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { t } from 'i18next'
 
 export const Header = () => {
 
@@ -26,18 +27,18 @@ export const Header = () => {
                         <>
                             <div className="Header__link">
                                 <Link to={ROUTES.login}>
-                                    <Button className="login-btn" type="primary">Log In</Button>
+                                    <Button className="login-btn" type="primary">{t('Login')}</Button>
                                 </Link>
                             </div>
                             <div className="Header__link">
                                 <Link to={ROUTES.registration}>
-                                    <Button className="signup-btn">Sign Up</Button>
+                                    <Button className="signup-btn">{t('Signup')}</Button>
                                 </Link>
                             </div>
                         </>
                         : <div className="Header__link">
                             <Link to={ROUTES.profile.account}>
-                                <Button type="primary" icon={<UserOutlined />}>Account</Button>
+                                <Button type="primary" icon={<UserOutlined />}>{t('Account')}</Button>
                             </Link>
                         </div>
                     }

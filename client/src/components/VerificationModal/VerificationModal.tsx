@@ -5,6 +5,7 @@ import useCountdown from '../../hooks/useCountdown';
 import UserService from '../../services/UserService';
 import { updateUserSuccess } from '../../store/actions/user/userAction';
 import { ReactComponent as CheckIcon } from './images/check.svg'
+import { t } from 'i18next'
 
 interface VerificationModalProps {
     type: VetificationType
@@ -41,6 +42,7 @@ export const VerificationModal = ({ type, visible, showSuccess, userCredentials,
     }, [code])
 
     const sendCode = async () => {
+        timer.start()
         await UserService.sendVerificationCode(type)
     }
 
@@ -59,16 +61,16 @@ export const VerificationModal = ({ type, visible, showSuccess, userCredentials,
 
     switch (type) {
         case 'email':
-            title = 'Email verification'
-            credentialsInfo = `We're sent a verification code to your email ${userCredentials}`
-            codeFromInfo = `Please, enter a code from your email into input below`
-            successMessage = 'Email has been successfully verified!'
+            title = t('Email verification')
+            credentialsInfo = t('Sent email code', { email: userCredentials })
+            codeFromInfo = t('Enter a code')
+            successMessage = t('Email verified')
             break
         case 'phone':
-            title = 'Phone verification'
-            credentialsInfo = `We're sent the SMS with a verification code to your phone +7 ${userCredentials}`
-            codeFromInfo = `Please, enter a code from SMS into input below`
-            successMessage = 'Phone has been successfully verified!'
+            title = t('Phone verification')
+            credentialsInfo = t('Sent phone code', { phone: userCredentials })
+            codeFromInfo = t('Enter a code')
+            successMessage = t('Phone verified')
             break
     }
 
@@ -84,7 +86,7 @@ export const VerificationModal = ({ type, visible, showSuccess, userCredentials,
             onOk={(close) => !close}
             title={title}
             footer={!success && [
-                <Button htmlType="submit" form="verify" loading={loading}>Submit</Button>
+                <Button htmlType="submit" form="verify" loading={loading}>{t('Submit')}</Button>
             ]}
             width={450}
         >
@@ -132,8 +134,8 @@ export const VerificationModal = ({ type, visible, showSuccess, userCredentials,
                             disabled={timer.isActive}
                         >
                             { !timer.isActive
-                                ? <>Resend a code</>
-                                : <>Didn't get a code? You can resend it in {timer.time}s</>
+                                ? <>{t('Resend a code')}</>
+                                : <>{t('Didnt get a code', { sec: timer.time })}</>
                             }
                         </Button>
                         <Button htmlType="submit" form="verify" id="submit-code-btn" style={{ display: 'none' }} />

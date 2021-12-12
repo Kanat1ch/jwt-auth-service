@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Select, Switch } from 'antd'
+import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 const { Option } = Select
 
 export const Appearance = () => {
+
+    const { i18n } = useTranslation()
 
     const [isChecked, setIsChecked] = useState<boolean>(!!localStorage.getItem('theme'))
     const [changing, setChanging] = useState<string>('')
@@ -13,6 +17,11 @@ export const Appearance = () => {
             setIsChecked(isChecked)
         }, 500)
         setChanging(isChecked ? 'dark' : 'light')
+    }
+
+    const changeLanguage = (lang: string) => {
+        i18n.changeLanguage(lang)
+        localStorage.setItem('lang', lang)
     }
 
     useEffect(() => {
@@ -31,19 +40,19 @@ export const Appearance = () => {
             layout="vertical"
         >
             <div className="col">
-                <h2>Appearance</h2>
+                <h2>{t('Appearance')}</h2>
                 <Form.Item
-                    label="Language"
+                    label={t('Language')}
                 >
-                    <Select defaultValue="en">
-                        <Option value="en">English</Option>
-                        <Option value="ru">Russian</Option>
+                    <Select defaultValue={localStorage.getItem('lang') || 'en'} onChange={changeLanguage}>
+                        <Option value="en">{t('English')}</Option>
+                        <Option value="ru">{t('Russian')}</Option>
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    label="Dark mode"
+                    label={t('Dark mode')}
                 >
-                    <Switch checked={isChecked} onChange={handleChangeTheme} checkedChildren="ON" unCheckedChildren="OFF" />
+                    <Switch checked={isChecked} onChange={handleChangeTheme} checkedChildren={t('ON')} unCheckedChildren={t('OFF')} />
                     <div className={`change-theme-animation ${changing === 'light' ? 'light' : 'dark'} ${changing && 'active'}`}></div>
                 </Form.Item>
             </div>

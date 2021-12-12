@@ -14,6 +14,7 @@ import { dataURLtoFile } from '../../lib/dataURLtoFile'
 import moment from 'moment'
 import { STATIC_URL } from '../../http'
 import { Appearance } from './components/Appearance'
+import { t } from 'i18next'
 
 type menuMode = 'vertical' | 'horizontal' | 'inline'
 
@@ -149,19 +150,19 @@ export const Profile = () => {
                 <div className="Profile__info">
                     <div className="Profile__username">
                         { isAppInit ?
-                            <div>{user?.username}'s <span>Profile</span></div>
+                            <div>{t('User username', { username: user?.username })} <span>{t('Profile')}</span></div>
                         : <Skeleton.Input active size="default" />
                     }
                     </div>
                     <div className="Profile__actions">
-                        <Button className="Profile__action" icon={<LogoutOutlined /> } onClick={logoutHandler} loading={loading === 'logout'}>Log out</Button>
+                        <Button className="Profile__action" icon={<LogoutOutlined /> } onClick={logoutHandler} loading={loading === 'logout'}>{t('Logout')}</Button>
                         <Popconfirm
-                            title="Are you sure to delete your account?"
-                            okText="Yes"
-                            cancelText="Cancel"
+                            title={t('Confirm delete')}
+                            okText={t('Yes')}
+                            cancelText={t('Cancel')}
                             onConfirm={deleteHandler}
                         >
-                            <Button className="Profile__action" icon={<DeleteOutlined />} loading={loading === 'delete'} danger>Delete account</Button>
+                            <Button className="Profile__action" icon={<DeleteOutlined />} loading={loading === 'delete'} danger>{t('Delete account')}</Button>
                         </Popconfirm>
                     </div>
                 </div>
@@ -174,16 +175,16 @@ export const Profile = () => {
                     mode={menuMode}
                 >
                     <Menu.Item key="account" icon={<SafetyOutlined />}>
-                        <Link to={ROUTES.profile.account}>Account</Link>
+                        <Link to={ROUTES.profile.account}>{t('Account')}</Link>
                     </Menu.Item>
                     <Menu.Item key="personal" icon={<UserOutlined />}>
-                        <Link to={ROUTES.profile.personal}>Personal</Link>
+                        <Link to={ROUTES.profile.personal}>{t('Personal')}</Link>
                     </Menu.Item>
                     <Menu.Item key="secure" icon={<LockOutlined />}>
-                        <Link to={ROUTES.profile.secure}>Secure</Link>
+                        <Link to={ROUTES.profile.secure}>{t('Secure')}</Link>
                     </Menu.Item>
                     <Menu.Item key="appearance" icon={<FormatPainterOutlined />}>
-                        <Link to={ROUTES.profile.apperience}>Appearance</Link>
+                        <Link to={ROUTES.profile.apperience}>{t('Appearance')}</Link>
                     </Menu.Item>
                 </Menu>
 

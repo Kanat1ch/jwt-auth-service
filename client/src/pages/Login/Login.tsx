@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import './Login.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, removeErrors } from '../../store/actions/user/userAction'
+import { t } from 'i18next'
 
 export const Login = () => {
 
@@ -36,14 +37,14 @@ export const Login = () => {
 
     useEffect(() => {
         if (errorMessage) {
-            message.error(errorMessage);
+            message.error(t('errors.login'));
             dispatch(removeErrors())
         }
     }, [errorMessage])
 
     return (
         <div className="Login">
-            <p className="Login__preview-text">Log in to your account or <Link to={ROUTES.registration}>register now</Link></p>
+            <p className="Login__preview-text">{t('Login or')} <Link to={ROUTES.registration}>{t('register now')}</Link></p>
             <Form
                 name="basic"
                 initialValues={{ remember: true }}
@@ -53,10 +54,10 @@ export const Login = () => {
             >
                 <Form.Item
                 name="username"
-                rules={[{ required: true, message: 'Please input your username or email!' }]}
+                rules={[{ required: true, message: t('errors.username.empty') }]}
                 >
                     <Input
-                        placeholder="Username or Email"
+                        placeholder={t('Username or Email')}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         prefix={<UserOutlined style={{ color: '#979797' }} />} 
@@ -65,10 +66,10 @@ export const Login = () => {
     
                 <Form.Item
                     name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[{ required: true, message: t('errors.password.empty') }]}
                 >
                     <Input.Password
-                        placeholder="Password"
+                        placeholder={t('Password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         prefix={<LockOutlined style={{ color: '#979797' }} />}
@@ -81,14 +82,14 @@ export const Login = () => {
                         htmlType="submit"
                         loading={loading}
                     >
-                        Log in
+                        {t('Login')}
                     </Button>
 
                     <Button
                         type="link"
                         className="Login__forgot-password-btn"
                     >
-                        Reset password
+                        {t('Reset password')}
                     </Button>
                 </Form.Item>
             </Form>

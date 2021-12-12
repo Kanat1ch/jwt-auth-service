@@ -7,6 +7,7 @@ import './Signup.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { registration } from '../../store/actions/user/userAction'
 import AuthService from '../../services/AuthService'
+import { t } from 'i18next'
 
 export const Signup = () => {
 
@@ -37,7 +38,7 @@ export const Signup = () => {
 
     return (
         <div className="Signup">
-            <p className="Signup__preview-text">Register or <Link to={ROUTES.login}>log in to your account</Link></p>
+            <p className="Signup__preview-text">{t('Register or')} <Link to={ROUTES.login}>{t('login now')}</Link></p>
             <Form
                 name="basic"
                 initialValues={{ remember: true }}
@@ -48,8 +49,8 @@ export const Signup = () => {
                 <Form.Item
                     name="username"
                     rules={[
-                        { required: true, message: 'Please input your username' },
-                        { min: 3, max: 20, message: 'Username must be from 3 to 20 symbols' },
+                        { required: true, message: t('errors.username.empty') },
+                        { min: 3, max: 20, message: t('errors.username.length') },
                         () => ({
                             async validator(_, value) {
                                 if (!value) {
@@ -59,14 +60,14 @@ export const Signup = () => {
                                 if (!isValueExist.data.errors) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error(`Username ${value} is already exist`));
+                                return Promise.reject(new Error(t('errors.username.exist', { value: value })));
                             },
                         }),
                     ]}
                     validateTrigger="onBlur"
                 >
                     <Input
-                        placeholder="Username"
+                        placeholder={t('Username')}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         prefix={<UserOutlined style={{ color: '#979797' }} />}
@@ -77,8 +78,8 @@ export const Signup = () => {
                 <Form.Item
                     name="email"
                     rules={[
-                        { type: 'email', message: 'The email is not valid' },
-                        { required: true, message: 'Please input your email' },
+                        { type: 'email', message: t('errors.email.invalid') },
+                        { required: true, message: t('errors.email.empty') },
                         () => ({
                             async validator(_, value) {
                                 if (!value) {
@@ -88,14 +89,14 @@ export const Signup = () => {
                                 if (!isValueExist.data.errors) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error(`Email ${value} is already exist`));
+                                return Promise.reject(new Error(t('errors.email.exist', { value: value })));
                             },
                         }),
                     ]}
                     validateTrigger="onBlur"
                 >
                     <Input
-                        placeholder="Email"
+                        placeholder={t('Email')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         prefix={<MailOutlined style={{ color: '#979797' }} />} 
@@ -105,13 +106,13 @@ export const Signup = () => {
                 <Form.Item
                     name="password"
                     rules={[
-                        { required: true, message: 'Please input your password' },
-                        { min: 6, max: 30, message: 'Password must be from 6 to 30 symbols' }
+                        { required: true, message: t('errors.password.empty') },
+                        { min: 6, max: 30, message: t('errors.password.length') }
                     ]}
                     validateTrigger="onBlur"
                 >
                     <Input.Password
-                        placeholder="Password"
+                        placeholder={t('Password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         prefix={<LockOutlined style={{ color: '#979797' }} />}
@@ -122,20 +123,20 @@ export const Signup = () => {
                     name="confirm"
                     dependencies={['password']}
                     rules={[
-                        { required: true, message: 'Please confirm your password' },
+                        { required: true, message: t('errors.confirm.empty') },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
                                 if (!value || getFieldValue('password') === value) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error('Passwords do not match'));
+                                return Promise.reject(new Error(t('errors.confirm.notMatch')));
                             },
                         }),
                     ]}
                     validateTrigger="onBlur"
                 >
                     <Input.Password
-                        placeholder="Repeat password"
+                        placeholder={t('Repeat password')}
                         value={confirm}
                         onChange={(e) => setConfirm(e.target.value)}
                         prefix={<LockOutlined style={{ color: '#979797' }} />}
@@ -148,7 +149,7 @@ export const Signup = () => {
                         htmlType="submit"
                         loading={loading}
                     >
-                        Sign up
+                        {t('Signup')}
                     </Button>
                 </Form.Item>
             </Form>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input, Radio, Button, message } from 'antd'
 import { edit, removeErrors } from '../../../store/actions/user/userAction'
+import { t } from 'i18next'
 
 export const Personal = () => {
 
@@ -21,7 +22,7 @@ export const Personal = () => {
 
     useEffect(() => {
         if (loading && status === 'edited') {
-            message.success('Account successfully updated');
+            message.success(t('success.update'));
             dispatch(removeErrors())
         }
     }, [loading, status])
@@ -36,33 +37,33 @@ export const Personal = () => {
             onFinish={updateUserHandler}
         >
             <div className="col">
-                <h2>Personal</h2>
+                <h2>{t('Personal')}</h2>
                 <Form.Item
-                    label="Name"
+                    label={t('Name')}
                     name="name"
                     initialValue={user?.name}
                 >
                     <Input
-                        placeholder="Name"
+                        placeholder={t('Name')}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Item> 
 
                 <Form.Item
-                    label="Surname"
+                    label={t('Surname')}
                     name="surname"
                     initialValue={user?.surname}
                 >
                     <Input
-                        placeholder="Surname"
+                        placeholder={t('Surname')}
                         value={surname}
                         onChange={(e) => setSurname(e.target.value)}
                     />
                 </Form.Item> 
 
                 <Form.Item
-                    label="Sex"
+                    label={t('Sex')}
                     name="sex"
                     initialValue={user?.sex}
                 >
@@ -70,8 +71,8 @@ export const Personal = () => {
                         value={sex}
                         onChange={(e) => setSex(e.target.value)}
                     >
-                        <Radio value="male">Male</Radio>
-                        <Radio value="female">Female</Radio>
+                        <Radio value="male">{t('Male')}</Radio>
+                        <Radio value="female">{t('Female')}</Radio>
                     </Radio.Group>
                 </Form.Item>
 
@@ -82,7 +83,7 @@ export const Personal = () => {
                         onClick={updateUserHandler}
                         loading={loading}
                     >
-                        Update personal info
+                        {t('Update personal info')}
                     </Button>
                 </Form.Item>
             </div>
