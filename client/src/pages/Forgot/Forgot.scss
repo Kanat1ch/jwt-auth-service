@@ -1,0 +1,44 @@
+#root .Forgot {
+    &__preview-text {
+        color: #979797;
+    }
+
+    &__steps {
+        width: 100%;
+        max-width: 800px;
+        margin: 30px 0;
+
+        .ant-steps-item-description {
+            max-width: 220px;
+        }
+    }
+
+    &__inline-form-item {
+        display: flex;
+        align-items: flex-end;
+        max-width: 400px;
+
+        input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            width: 70px;
+        }
+    }
+
+    &__input-form-item {
+        width: 100%;
+        max-width: 330px;
+    }
+
+    &__input-code {
+        width: 110px;
+        font-size: 18px;
+        height: 32px;
+        letter-spacing: 3px;
+    }
+}

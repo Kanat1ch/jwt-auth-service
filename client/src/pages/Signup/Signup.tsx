@@ -72,6 +72,7 @@ export const Signup = () => {
                         onChange={(e) => setUsername(e.target.value)}
                         prefix={<UserOutlined style={{ color: '#979797' }} />}
                         maxLength={20}
+                        autoFocus
                     />
                 </Form.Item>
 

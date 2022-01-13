@@ -1,5 +1,5 @@
-import $api from "../http"
-import { AxiosResponse } from 'axios'
+import $api, { API_URL } from "../http"
+import axios, { AxiosResponse } from 'axios'
 import { AuthResponse } from "../types/AuthResponse"
 
 export default class AuthService {
@@ -17,5 +17,11 @@ export default class AuthService {
     
     static async logout(): Promise<void> {
         return $api.post('/logout')
+    }
+
+    static async linked(userData: string): Promise<AxiosResponse> {
+        return axios.post('/linked', { userData }, {
+            baseURL: API_URL,
+        })
     }
 }

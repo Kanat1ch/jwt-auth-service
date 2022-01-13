@@ -6,7 +6,7 @@
     "register now": "register now",
     "login now": "log in to your account",
     "Username or Email": "Username or Email",
-    "Reset password": "Reset password",
+    "Forgot password": "Forgot password?",
     "Account": "Account",
     "Personal": "Personal",
     "Secure": "Secure",
@@ -45,6 +45,7 @@
     "Yes": "Yes",
     "Cancel": "Cancel",
     "Submit": "Submit",
+    "Save": "Save",
     "Email verification": "Email verification",
     "Phone verification": "Phone verification",
     "Sent email code": "We're sent a verification code to your email {{ email }}",
@@ -54,6 +55,7 @@
     "Phone verified": "Phone has been successfully verified!",
     "Didnt get a code": "You can resend a code in {{ sec }}s",
     "Resend a code": "Resend a code",
+    "Change pic": "Change profile picture",
     "errors": {
         "username": {
             "empty": "Please input your username",

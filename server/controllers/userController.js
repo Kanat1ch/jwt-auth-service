@@ -156,6 +156,38 @@ class UserController {
             next(e)
         }
     }
+
+    async linked(req, res, next) {
+        try {
+            const { userData } = req.body
+            const linked = await UserService.linked(userData)
+            return res.status(201).json({ linked })
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async sendResetCode(req, res, next) {
+        try {
+            const { verifyingService, data } = req.body
+
+            await UserService.sendCode(verifyingService, data)
+            return res.status(201).json({ messge: 'Reset code successfully sended' })
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async checkResetCode(req, res, next) {
+        try {
+            const { verifyingService, data, code } = req.body
+
+            const userData = await UserService.checkResetCode(verifyingService, data, code)
+            return res.status(201).json(userData)
+        } catch (e) {
+            next(e)
+        }
+    }
 }
 
 module.exports = new UserController()

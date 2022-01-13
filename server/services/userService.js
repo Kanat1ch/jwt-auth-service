@@ -29,12 +29,14 @@ class UserService {
     }
 
     async sendCode(service, data) {
+        const userData = await User.findOne({ $or: [{ username: data }, { email: data }, { phone: data }] })
+
         if (service === 'email') {
-            await MailService.sendActivationMail(data)
+            await MailService.sendActivationMail(userData.email)
         }
 
         if (service === 'phone') {
-            await SmsService.sendVerifyCode(`+7${data.replace(/\D/g,'')}`)
+            await SmsService.sendVerifyCode(`+7${userData.phone.replace(/\D/g,'')}`)
         }
     }
 
@@ -52,6 +54,22 @@ class UserService {
         }
         if (isValid) {
             await userFromDB.save()
+            return await this.generateAndSaveToken(userFromDB)
+        }
+        throw ApiError.BadRequest('Invalid code')
+    }
+
+    async checkResetCode(verifyingService, data, code) {
+        const userFromDB = await User.findOne({ $or: [{ username: data }, { email: data }, { phone: data }] })
+        let isValid = false
+        switch (verifyingService) {
+            case 'phone':
+                isValid = await SmsService.checkVerifyCode(`+7${userFromDB.phone.replace(/\D/g,'')}`, code)
+                break
+            case 'email':
+                isValid = await MailService.checkVerifyCode(userFromDB.email, code)
+        }
+        if (isValid) {
             return await this.generateAndSaveToken(userFromDB)
         }
         throw ApiError.BadRequest('Invalid code')
@@ -173,6 +191,24 @@ class UserService {
         if (!isPasswordEqual) {
             throw ApiError.BadRequest('Incorrect password')
         }
+    }
+
+    async linked(userData) {
+        const linked = ['email']
+
+        const isPhone = /^\d+$/.test(userData) && userData.length === 10
+        const phone = isPhone ? `(${userData.slice(0, 3)}) ${userData.slice(3, 6)}-${userData.slice(6, 8)}-${userData.slice(8)}` : userData
+
+        const user = await User.findOne({ $or: [{ username: userData }, { email: userData }, { phone }] })
+        
+        if (!user) {
+            throw ApiError.BadRequest('User with this credentials was not found')
+        }
+
+        if (user.phone) {
+            linked.push('phone')
+        }
+        return linked
     }
 }
 

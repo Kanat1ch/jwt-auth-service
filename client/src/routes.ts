@@ -9,5 +9,6 @@ export const ROUTES = {
         verified: '/profile/verified'
     },
     login: '/login',
-    registration: '/registration'
+    registration: '/registration',
+    forgot: '/forgot',
 }

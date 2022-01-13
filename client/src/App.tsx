@@ -4,6 +4,7 @@ import { Layout } from './components/Layout/Layout'
 import { Home } from './pages/Home/Home'
 import { Login } from './pages/Login/Login'
 import { Signup } from './pages/Signup/Signup'
+import { Forgot } from './pages/Forgot/Forgot'
 import { Profile } from './pages/Profile/Profile'
 import "./styles/main.css"
 import "./styles/dark.scss"
@@ -39,6 +40,7 @@ const App = () => {
                         <Route path={ROUTES.home} element={<Home />} />
                         <Route path={ROUTES.login} element={<Login />} />
                         <Route path={ROUTES.registration} element={<Signup />} />
+                        <Route path={ROUTES.forgot} element={<Forgot />} />
                         <Route path={ROUTES.profile.root} element={<Profile />} />
                         <Route path={`${ROUTES.profile.root}/:section`} element={<Profile />} />
                         <Route path="*" element={<Navigate to={ROUTES.home} />}

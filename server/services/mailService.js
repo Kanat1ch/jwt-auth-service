@@ -23,7 +23,7 @@ class MailService {
         await user.save()
 
         await this.transporter.sendMail({
-            from: process.env.SMTP_USER,
+            from: `Auth Service <${process.env.SMTP_USER}>`,
             to,
             subject: 'Activation code from Auth Service',
             text: '',

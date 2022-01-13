@@ -203,10 +203,11 @@ export const Profile = () => {
 
 
             <Modal
-                title="Change profile picture"
+                title={t("Change pic")}
                 visible={showImageModal}
                 onOk={onCrop}
-                okText="Save"
+                okText={t('Save')}
+                cancelText={t('Cancel')}
                 onCancel={() => setShowImageModal(false)}
             >
                 { userImage && (

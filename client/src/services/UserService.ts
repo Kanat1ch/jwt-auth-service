@@ -38,6 +38,14 @@ export default class UserService {
         return $api.post('/check-verify', { verifyingService, code })
     }
 
+    static sendResetCode(verifyingService: string, data: string): Promise<AxiosResponse> {
+        return $api.post('/send-reset', { verifyingService, data })
+    }
+
+    static checkResetCode(verifyingService: string, data: string, code: string): Promise<AxiosResponse> {
+        return $api.post('/check-reset', { verifyingService, data, code })
+    }
+
     static async isPasswordEqual(password: string): Promise<AxiosResponse> {
         return $api.post('/is-password-equal', { password })
     }

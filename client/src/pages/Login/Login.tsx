@@ -53,14 +53,15 @@ export const Login = () => {
                 onFinish={loginHandler}
             >
                 <Form.Item
-                name="username"
-                rules={[{ required: true, message: t('errors.username.empty') }]}
+                    name="username"
+                    rules={[{ required: true, message: t('errors.username.empty') }]}
                 >
                     <Input
                         placeholder={t('Username or Email')}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         prefix={<UserOutlined style={{ color: '#979797' }} />} 
+                        autoFocus
                     />
                 </Form.Item>
     
@@ -89,7 +90,7 @@ export const Login = () => {
                         type="link"
                         className="Login__forgot-password-btn"
                     >
-                        {t('Reset password')}
+                        <Link to={ROUTES.forgot}>{t('Forgot password')}</Link>
                     </Button>
                 </Form.Item>
             </Form>
